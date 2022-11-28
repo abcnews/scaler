@@ -47,7 +47,7 @@ Promise.all([
     if (appMountEl) {
       new ScrollyWrapper({
         target: appMountEl,
-        props: { scrollyData, indexData, customisation }
+        props: { scrollyData, }
       });
     }
   } catch (e) {

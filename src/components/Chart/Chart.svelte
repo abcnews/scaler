@@ -15,17 +15,17 @@
 
   export let data: any[] = [
     {
-      costThousands: 160,
-      label: 'Your tax bill over 10 years (160k)',
-    },
-    {
       costThousands: 10,
-      label: 'Your savings from the tax cut over 10 years (10k)',
+      label: '$9,500 each',
     },
-    {
-      costThousands: 90,
-      label: 'Savings from the tax cut over 10 years for a CEO (90k)',
-    },
+    // {
+    //   costThousands: 10,
+    //   label: 'Your savings from the tax cut over 10 years (10k)',
+    // },
+    // {
+    //   costThousands: 90,
+    //   label: 'Savings from the tax cut over 10 years for a CEO (90k)',
+    // },
     {
       costThousands: 1400,
       label: 'Two bedroom house in Sydney (1.4 m)',

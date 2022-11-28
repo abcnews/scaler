@@ -16,7 +16,7 @@ Promise.all([
 
   if (appMountEl) {
     appProps = acto(getMountValue(appMountEl));
-    const props = { index };
+    const props = { };
     vizElem = new App({
       target: appMountEl,
       props,
