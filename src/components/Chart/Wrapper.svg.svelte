@@ -29,16 +29,20 @@
       progress: progress + h + MARGIN_Y,
     };
   }, { progress: 0, blocks: [] }).blocks;
-  $: console.log(blocks);
 </script>
 
 <Svg>
+
+  <pattern id="pattern-grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+    <rect x={5} y={5} width={30} height={30} fill='grey'>
+  </pattern>
+
   <rect
     x={0}
     y={0}
     height={$height}
     width={$width}
-    fill={'#6c97e8'}
+    fill={'url(#pattern-grid)'}
   />
 
   {#each blocks as block}

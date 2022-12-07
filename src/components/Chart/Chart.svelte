@@ -10,8 +10,19 @@
   // export let height: number;
   export let padding = { top: 0, bottom: 0, left: 40, right: 40 };
 
-  export let totalArea = 243_000_000 * 1;
-  const storyLength = 90_000;
+  export let totalArea = 243_000_000;
+  // const storyLength = 90_000;
+  const squareArea = 1_000;
+
+  const GRID_PIXELS = 40;
+
+  $: numSquares = totalArea / squareArea;
+  $: numColumns = Math.floor(width / GRID_PIXELS);
+  $: numRows = Math.ceil(numSquares / numColumns);
+  $: storyLength = numRows * GRID_PIXELS;
+
+  $: totalHeight = totalArea / width;
+  $: console.log({ totalArea, width, totalHeight, storyLength, numRows, numColumns });
 
   export let data: any[] = [
     {
@@ -67,9 +78,6 @@
       label: 'Free university for domestic students (70 b)',
     },
   ];
-
-  $: totalHeight = totalArea / width;
-  $: console.log({ totalArea, width, totalHeight, storyLength });
 </script>
 
 <div
@@ -85,7 +93,7 @@
       {padding}
       x={xKey}
       y={yKey}
-      yDomain={[0, totalHeight]}
+      yDomain={[0, numRows]}
       yRange={[0, storyLength]}
       {data}
     >
