@@ -2,6 +2,8 @@
   import { getContext } from 'svelte';
   import { Svg, Html } from 'layercake';
 
+  import { COLOURS } from '../../constants';
+
   // import Block from './Block.svg.svelte';
 
   const { data, height, width, yGet } = getContext('LayerCake');
@@ -38,7 +40,7 @@
     y={0}
     height={$height}
     width={$width}
-    fill={'#6c97e8'}
+    fill={COLOURS.bg}
   />
 
   {#each blocks as block}
@@ -47,7 +49,7 @@
       y={block.top}
       height={block.height}
       width={block.width}
-      fill="red"
+      fill={COLOURS.primary}
     />
   {/each}
 </Svg>
@@ -60,6 +62,7 @@
         height: {block.height}px;
         margin-bottom: {MARGIN_Y}px;
         margin-left: {PADDING_X + 10}px;
+        margin-right: {PADDING_X + 10}px;
       "
     >
       <div class="block-label">
@@ -77,5 +80,6 @@
   .block-label > p {
     position: sticky;
     top: 10px;
+    text-align: center;
   }
 </style>

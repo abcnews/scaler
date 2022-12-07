@@ -11,7 +11,7 @@
   export let padding = { top: 0, bottom: 0, left: 40, right: 40 };
 
   export let totalArea = 243_000_000 * 1;
-  const storyLength = 90_000;
+  const storyLength = 190_000;
 
   export let data: any[] = [
     {
