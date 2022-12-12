@@ -44,37 +44,33 @@
     {
       costThousands: 190_000,
       label: 'A new green bridge in Brisbane – $190 million.',
-      labelHeight: 40,
+      labelHeight: 30,
     },
     {
       costThousands: 2_000_000,
       label: 'Bigger yet, the total cost of building the Fiona Stanley Hospital in Perth came to around $2 billion.',
-      labelHeight: 50,
+      labelHeight: 70,
       continue: true,
     },
     {
       label: 'It\'s one of the most expensive buildings in the world.',
-      labelHeight: 50,
+      labelHeight: 70,
     },
     {
       label: 'But if you thought that was big, it\'s nothing compared to these tax cuts.',
-      labelHeight: 50,
+      labelHeight: 70,
     },
     {
-      label: 'here’s how much all the people earning less than $45,000 per year combined are going to receive from the tax cuts.',
-      labelHeight: 50,
+      label: 'Here’s how much all the people earning less than $45,000 per year combined are going to receive from the tax cuts.',
+      labelHeight: 70,
     },
     {
-      label: 'Actually, never mind that, they won’t see a single dime!',
-      labelHeight: 50,
+      label: 'Actually, never mind that, they won’t see a cent of it.',
+      labelHeight: 70,
     },
     {
       label: 'Yep. That means that anyone earning minimum wage at a full-time job is going to miss out.',
-      labelHeight: 50,
-    },
-    {
-      label: 'We\'ll get to where the majority of the money is going soon (hint: rich people).',
-      labelHeight: 50,
+      labelHeight: 70,
     },
     // {
     //   costThousands: 2_000_000,
@@ -94,11 +90,11 @@
     },
     {
       label: 'Seems like a lot... do you think we\'re nearly done?',
-      labelHeight: 100,
+      labelHeight: 120,
     },
     {
       label: 'Nope. we still haven’t even made it a quarter of the way through this scrolling odyssey.',
-      labelHeight: 100,
+      labelHeight: 120,
     },
     
 
