@@ -1,27 +1,26 @@
 <script lang="ts">
   import { LayerCake } from 'layercake';
-  import { GRID_SIZE, SQUARE_VALUE } from '../../constants';
+  import { NUM_COLUMNS, GRID_SIZE, SQUARE_VALUE } from '../../constants';
 
-  import Wrapper from './Wrapper.svg.svelte';
+  import Blocks from './Blocks.svg.svelte';
 
   const xKey = 'widthPercent';
   const yKey = 'costThousands';
 
   export let width: number;
   // export let labelHeight: number;
-  export let padding = { top: 0, bottom: 0, left: 40, right: 40 };
+  export let padding = { top: 0, bottom: 0, left: 0, right: 0 };
   const TOTAL_VALUE = 243_000_000;
-
-  const NUM_COLUMNS = 20;
 
   $: numSquares = TOTAL_VALUE / SQUARE_VALUE;
   // $: numColumns = Math.floor(width / GRID_SIZE);
   $: numRows = Math.ceil(numSquares / NUM_COLUMNS);
   $: gridSize = Math.floor(width / NUM_COLUMNS)
+  $: gridWidth = Math.floor(width / gridSize);
 
-  $: storyLength = numRows * gridSize;
+  $: height = numRows * gridSize;
 
-  $: console.log({ width, storyLength, numRows, numColumns: NUM_COLUMNS });
+  // $: console.log({ width, height, numRows, numSquares, numColumns: NUM_COLUMNS, gridSize, gridWidth });
 
   export let data: any[] = [
     {
@@ -126,21 +125,21 @@
   class="chart-container"
   style="
     width: {width}px;
-    height: {storyLength}px;
+    height: {height}px;
     margin: auto;
   ">
 
-  {#if width && storyLength}
+  {#if width && height}
     <LayerCake
       {padding}
       x={xKey}
       y={yKey}
       yDomain={[0, numRows]}
-      yRange={[0, storyLength]}
+      yRange={[0, height]}
       {data}
     >
 
-      <Wrapper />
+      <Blocks />
     </LayerCake>
   {/if}
 </div>

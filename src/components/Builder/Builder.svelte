@@ -158,7 +158,7 @@
     margin: auto;
     width: 100%;
     max-width: 52rem;
-    padding: 3rem;
+    padding: 0rem;
   }
 
   figure {

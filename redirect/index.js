@@ -1,1 +1,1 @@
-window.location = String(window.location).replace('/latest/', '/0.0.2/')
+window.location = String(window.location).replace('/latest/', '/grid-layout/')
