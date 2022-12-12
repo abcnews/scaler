@@ -1,5 +1,6 @@
 <script lang="ts">
   import { LayerCake } from 'layercake';
+  import { GRID_SIZE, SQUARE_VALUE } from '../../constants';
 
   import Wrapper from './Wrapper.svg.svelte';
 
@@ -7,76 +8,117 @@
   const yKey = 'costThousands';
 
   export let width: number;
-  // export let height: number;
+  // export let labelHeight: number;
   export let padding = { top: 0, bottom: 0, left: 40, right: 40 };
+  const TOTAL_VALUE = 243_000_000;
 
-  export let totalArea = 243_000_000;
-  // const storyLength = 90_000;
-  const squareArea = 1_000;
+  const NUM_COLUMNS = 20;
 
-  const GRID_PIXELS = 40;
+  $: numSquares = TOTAL_VALUE / SQUARE_VALUE;
+  // $: numColumns = Math.floor(width / GRID_SIZE);
+  $: numRows = Math.ceil(numSquares / NUM_COLUMNS);
+  $: gridSize = Math.floor(width / NUM_COLUMNS)
 
-  $: numSquares = totalArea / squareArea;
-  $: numColumns = Math.floor(width / GRID_PIXELS);
-  $: numRows = Math.ceil(numSquares / numColumns);
-  $: storyLength = numRows * GRID_PIXELS;
+  $: storyLength = numRows * gridSize;
 
-  $: totalHeight = totalArea / width;
-  $: console.log({ totalArea, width, totalHeight, storyLength, numRows, numColumns });
+  $: console.log({ width, storyLength, numRows, numColumns: NUM_COLUMNS });
 
   export let data: any[] = [
     {
-      costThousands: 10,
-      label: '$9,500 each',
+      costThousands: 1000,
+      label: 'Each of these squares is $1 million.',
+      labelHeight: 2,
+    },
+    {
+      label: 'So, come along for a scroll through $243 billion, and let\'s put things into perspective.',
+      labelHeight: 40,
     },
     // {
-    //   costThousands: 10,
-    //   label: 'Your savings from the tax cut over 10 years (10k)',
-    // },
-    // {
-    //   costThousands: 90,
-    //   label: 'Savings from the tax cut over 10 years for a CEO (90k)',
+    //   label: 'Let\'s put things into perspective...',
+    //   labelHeight: 100,
     // },
     {
       costThousands: 1400,
-      label: 'Two bedroom house in Sydney (1.4 m)',
+      label: 'The average two bedroom house in Sydney costs $1.4 million.',
+      labelHeight: 20,
     },
     {
       costThousands: 190_000,
-      label: 'A new green bridge in Brisbane (190 m)',
+      label: 'A new green bridge in Brisbane – $190 million.',
+      labelHeight: 40,
     },
     {
       costThousands: 2_000_000,
-      label: 'Fiona Stanley Hospital in Perth (2 b)',
+      label: 'Bigger yet, the total cost of building the Fiona Stanley Hospital in Perth came to around $2 billion.',
+      labelHeight: 50,
+      continue: true,
     },
     {
-      costThousands: 2_000_000,
-      label: 'Westconnex motorway in Sydney (2 b)',
+      label: 'It\'s one of the most expensive buildings in the world.',
+      labelHeight: 50,
     },
     {
-      costThousands: 5_000_000,
-      label: 'Hosting the 2035 olympics in Brisbane (5 b)',
+      label: 'But if you thought that was big, it\'s nothing compared to these tax cuts.',
+      labelHeight: 50,
     },
     {
-      costThousands: 0,
-      label: 'Combined tax cuts for all Australians making under $45,000 (0)',
+      label: 'here’s how much all the people earning less than $45,000 per year combined are going to receive from the tax cuts.',
+      labelHeight: 50,
     },
+    {
+      label: 'Actually, never mind that, they won’t see a single dime!',
+      labelHeight: 50,
+    },
+    {
+      label: 'Yep. That means that anyone earning minimum wage at a full-time job is going to miss out.',
+      labelHeight: 50,
+    },
+    {
+      label: 'We\'ll get to where the majority of the money is going soon (hint: rich people).',
+      labelHeight: 50,
+    },
+    // {
+    //   costThousands: 2_000_000,
+    //   label: 'Westconnex motorway in Sydney (2 b)',
+    //   labelHeight: 10,
+    // },
+    // {
+    //   costThousands: 5_000_000,
+    //   label: 'Hosting the 2035 olympics in Brisbane (5 b)',
+    //   labelHeight: 10,
+    // },
     {
       costThousands: 10_000_000,
-      label: 'Mental health in medicare (10 b)',
+      label: 'It\'s been estimated it will cost $10 billion to add mental health to medicare.',
+      labelHeight: 400,
+      continue: true,
     },
     {
-      costThousands: 12_000_000,
-      label: 'Household electrification program (12 b)',
+      label: 'Seems like a lot... do you think we\'re nearly done?',
+      labelHeight: 100,
     },
     {
-      costThousands: 30_000_000,
-      label: '25% pay rise for aged care workers (30 b)',
+      label: 'Nope. we still haven’t even made it a quarter of the way through this scrolling odyssey.',
+      labelHeight: 100,
     },
-    {
-      costThousands: 70_000_000,
-      label: 'Free university for domestic students (70 b)',
-    },
+    
+
+      
+    // {
+    //   costThousands: 12_000_000,
+    //   label: 'Household electrification program (12 b)',
+    //   labelHeight: 10,
+    // },
+    // {
+    //   costThousands: 30_000_000,
+    //   label: '25% pay rise for aged care workers (30 b)',
+    //   labelHeight: 10,
+    // },
+    // {
+    //   costThousands: 70_000_000,
+    //   label: 'Free university for domestic students (70 b)',
+    //   labelHeight: 10,
+    // },
   ];
 </script>
 
@@ -88,7 +130,7 @@
     margin: auto;
   ">
 
-  {#if width && totalHeight}
+  {#if width && storyLength}
     <LayerCake
       {padding}
       x={xKey}
@@ -98,7 +140,7 @@
       {data}
     >
 
-      <Wrapper {totalArea} />
+      <Wrapper />
     </LayerCake>
   {/if}
 </div>

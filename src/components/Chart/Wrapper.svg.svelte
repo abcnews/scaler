@@ -2,84 +2,184 @@
   import { getContext } from 'svelte';
   import { Svg, Html } from 'layercake';
 
+  import { COLOURS, GRID_PADDING, SQUARE_VALUE } from '../../constants';
+
   // import Block from './Block.svg.svelte';
 
-  const { data, height, width, yGet } = getContext('LayerCake');
+  interface Marker {
+    costThousands: number;
+    label: string;
+    labelHeight: number;
+    continue?: boolean;
+  }
 
-  // export let totalArea: number;
+  const { data, height, width } = getContext('LayerCake');
 
-  // $: displayHeight = totalArea / $width;
+  const PADDING_X = 0;
 
-  const PADDING_X = 20;
-  const MARGIN_Y = 300;
+  const NUM_COLUMNS = 20;
+  $: gridSize = Math.floor($width / NUM_COLUMNS);
+  // $: numColumns = Math.floor($width / gridSize);
+  $: gridWidth = Math.floor($width / gridSize);
 
-  $: blocks = $data.reduce(({ progress, blocks }, item) => {
-    const total = $yGet(item);
-    const w = Math.min(Math.max(1, Math.sqrt(total)), $width - PADDING_X * 2);
-    const h = total / w;
+  $: blocks = $data.reduce(({ progress, progressLabel, blocks }, item: Marker) => {
+    const total = item.costThousands || 0;
+    const numBlocks = total / SQUARE_VALUE;
+
+    const numRows = Math.max(Math.ceil(numBlocks / NUM_COLUMNS), 1);
+
+    const h = numRows * gridSize;
+    const w = gridWidth * gridSize;
+
+    const valueFromFullRows = (numRows - 1) * SQUARE_VALUE * gridWidth;
+    const finalRowBlocks = Math.floor((total - valueFromFullRows) / SQUARE_VALUE);
+    const valueFromFullBlocks = valueFromFullRows + finalRowBlocks * SQUARE_VALUE;
+    const finalBlockPixels = Math.ceil((total - valueFromFullBlocks) / SQUARE_VALUE * (gridSize - GRID_PADDING));
+
     const newBlock = {
-      top: progress,
       width: w,
+
+      top: progress,
       height: h,
+
+      labelTop: progressLabel,
+      labelHeight: item.labelHeight * gridSize,
+
+      finalRowBlocks,
+      finalBlockPixels,
       item,
+      numBlocks,
     };
+
+    if (item.continue) {
+      return {
+        blocks: [...blocks, newBlock],
+        progress: progress + h + gridSize * 2,
+        progressLabel: progressLabel + newBlock.labelHeight + gridSize * 2,
+      };
+    }
+
+    // const nextLabel = item.continue ? progressLabel + newBlock.labelHeight : progress + h;
 
     return {
       blocks: [...blocks, newBlock],
-      progress: progress + h + MARGIN_Y,
+      progress: progress + Math.max(h, newBlock.labelHeight) + gridSize * 2,
+      progressLabel: progress + Math.max(h, newBlock.labelHeight) + gridSize * 2,
+      // progressLabel: Math.max(progressLabel + newBlock.labelHeight, progress + h) + gridSize * 2,
     };
   }, { progress: 0, blocks: [] }).blocks;
 </script>
 
 <Svg>
 
-  <pattern id="pattern-grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-    <rect x={5} y={5} width={30} height={30} fill='grey'>
+  <pattern id="pattern-grid-bg" x="0" y="0" width={gridSize} height={gridSize} patternUnits="userSpaceOnUse">
+    <rect
+      x={GRID_PADDING / 2}
+      y={GRID_PADDING / 2}
+      width={gridSize - GRID_PADDING}
+      height={gridSize - GRID_PADDING}
+      fill={COLOURS.bg}
+    >
+  </pattern>
+  <pattern id="pattern-grid-block" x="0" y="0" width={gridSize} height={gridSize} patternUnits="userSpaceOnUse">
+    <rect
+      x={GRID_PADDING / 2}
+      y={GRID_PADDING / 2}
+      width={gridSize - GRID_PADDING}
+      height={gridSize - GRID_PADDING}
+      fill={COLOURS.primary}
+    >
   </pattern>
 
   <rect
     x={0}
     y={0}
     height={$height}
-    width={$width}
-    fill={'url(#pattern-grid)'}
+    width={gridWidth * gridSize}
+    fill={'url(#pattern-grid-bg)'}
   />
 
   {#each blocks as block}
     <rect
-      x={PADDING_X}
+      x={0}
       y={block.top}
-      height={block.height}
+      height={block.height - gridSize}
       width={block.width}
-      fill="red"
+      fill={'url(#pattern-grid-block'}
     />
+    {#if block.finalRowBlocks}
+      <rect
+        x={0}
+        y={block.top + (block.height - gridSize)}
+        height={gridSize}
+        width={block.finalRowBlocks * gridSize}
+        fill={'url(#pattern-grid-block'}
+      />
+    {/if}
+    {#if block.finalBlockPixels}
+      <rect
+        x={block.finalRowBlocks * gridSize}
+        y={block.top + (block.height - gridSize)}
+        height={block.finalBlockPixels}
+        width={gridSize}
+        fill={'url(#pattern-grid-block'}
+      />
+    {/if}
   {/each}
+
+  <!-- Waypoint markers for how much $$$ has been scrolled past -->
+  {#if $height}
+    {#each Array(Math.floor($height / (gridSize * 10))) as _, i}
+      {#if i > 100}
+        <text
+          x={0}
+          y={i * gridSize * 10 + gridSize / 2}
+        >
+          ${i * SQUARE_VALUE * 20 / 1000 / 100}b
+        </text>
+      {/if}
+    {/each}
+  {/if}
 </Svg>
 
 <Html>
-  {#each blocks as block}
-    <div
-      class="block-label-wrapper"
-      style="
-        height: {block.height}px;
-        margin-bottom: {MARGIN_Y}px;
-        margin-left: {PADDING_X + 10}px;
-      "
-    >
-      <div class="block-label">
-        <p>{block.item.label}</p>
+  <div class="labels">
+    {#each blocks as block}
+      <div
+        class="block-label-wrapper"
+        style="
+          position: absolute;
+          top: {block.labelTop}px;
+          height: {block.labelHeight}px;
+          width: {block.width}px;
+          margin-top: {0}px;
+          margin-bottom: {0}px;
+          margin-left: {PADDING_X + 10}px;
+          margin-right: {PADDING_X + 10}px;
+        "
+      >
+        <div class="block-label">
+          <p>{block.item.label}</p>
+        </div>
       </div>
-    </div>
-  {/each}
+    {/each}
+  </div>
 </Html>
 
 <style>
+  .labels {
+    position: relative;
+  }
   .block-label {
     height: 100%;
     position: relative;
   }
   .block-label > p {
     position: sticky;
-    top: 10px;
+    top: 15px;
+    padding: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
   }
 </style>

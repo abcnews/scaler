@@ -138,6 +138,9 @@
 
 
 <style lang="scss">
+  :global(aside) {
+    display: none;
+  }
   :global(body) {
     margin: 0;
   }
