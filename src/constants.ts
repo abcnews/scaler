@@ -4,10 +4,14 @@ export const defaultCustomisation: Customisation = {
 };
 
 export const TOTAL_AREA = 243_000_000; // in thousands
-export const SQUARE_VALUE = 1_000; // in thousands
+export const SQUARE_VALUE = 5_000; // in thousands
+
+export const FIRST_MARKER_VALUE = 1_000; // in millions
+export const ROWS_PER_MARKER = 10; // in millions
+
+export const FIRST_DIVIDER = 53_000; // in millions
 
 export const NUM_COLUMNS = 15;
-export const GRID_SIZE = 20;
 export const GRID_PADDING = 1;
 
 export const COLOURS = {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { LayerCake } from 'layercake';
-  import { NUM_COLUMNS, GRID_SIZE, SQUARE_VALUE } from '../../constants';
+  import { NUM_COLUMNS, SQUARE_VALUE } from '../../constants';
 
   import Blocks from './Blocks.svg.svelte';
 
@@ -8,70 +8,106 @@
   const yKey = 'costThousands';
 
   export let width: number;
-  // export let labelHeight: number;
   export let padding = { top: 0, bottom: 0, left: 0, right: 0 };
   const TOTAL_VALUE = 243_000_000;
 
   $: numSquares = TOTAL_VALUE / SQUARE_VALUE;
-  // $: numColumns = Math.floor(width / GRID_SIZE);
   $: numRows = Math.ceil(numSquares / NUM_COLUMNS);
   $: gridSize = Math.floor(width / NUM_COLUMNS)
-  $: gridWidth = Math.floor(width / gridSize);
-
   $: height = numRows * gridSize;
-
-  // $: console.log({ width, height, numRows, numSquares, numColumns: NUM_COLUMNS, gridSize, gridWidth });
 
   export let data: any[] = [
     {
-      costThousands: 1000,
-      label: 'Each of these squares is $1 million.',
+      costThousands: 5000,
+      label: 'If each of these squares is $5 million...',
       labelHeight: 2,
     },
     {
-      label: 'So, come along for a scroll through $243 billion, and let\'s put things into perspective.',
+      label: '...$243 billion will take a long time to scroll through.',
       labelHeight: 40,
     },
-    // {
-    //   label: 'Let\'s put things into perspective...',
-    //   labelHeight: 100,
-    // },
     {
-      costThousands: 1400,
-      label: 'The average two bedroom house in Sydney costs $1.4 million.',
-      labelHeight: 20,
+      label: 'So, let\'s put things into perspective as we go.',
+      labelHeight: 40,
+    },
+    {
+      costThousands: 220,
+      label: 'Here\'s the tiny $220k spent on the BoM rebrand.',
+      labelHeight: 10,
+    },
+    // https://www.smh.com.au/property/news/what-sydney-s-median-house-price-can-buy-across-the-country-20220610-p5asvk.html
+    {
+      costThousands: 1600,
+      label: 'And the median house price in Sydney, which is currently around $1.6 million.',
+      labelHeight: 10,
     },
     {
       costThousands: 190_000,
-      label: 'A new green bridge in Brisbane – $190 million.',
-      labelHeight: 30,
+      label: 'Let\'s try something bigger. How about a new green bridge in Brisbane – $190 million.',
+      labelHeight: 10,
     },
     {
       costThousands: 2_000_000,
       label: 'Bigger yet, the total cost of building the Fiona Stanley Hospital in Perth came to around $2 billion.',
-      labelHeight: 70,
+      labelHeight: 20,
       continue: true,
     },
     {
       label: 'It\'s one of the most expensive buildings in the world.',
-      labelHeight: 70,
+      labelHeight: 20,
     },
     {
       label: 'But if you thought that was big, it\'s nothing compared to these tax cuts.',
-      labelHeight: 70,
+      labelHeight: 40,
     },
     {
       label: 'Here’s how much all the people earning less than $45,000 per year combined are going to receive from the tax cuts.',
-      labelHeight: 70,
+      labelHeight: 40,
     },
     {
       label: 'Actually, never mind that, they won’t see a cent of it.',
-      labelHeight: 70,
+      labelHeight: 40,
     },
     {
-      label: 'Yep. That means that anyone earning minimum wage at a full-time job is going to miss out.',
-      labelHeight: 70,
+      label: 'That means that anyone earning minimum wage at a full-time job is going to miss out entirely.',
+      labelHeight: 40,
     },
+    {
+      costThousands: 10_000_000,
+      label: 'Meanwhile, it\'s been estimated it will cost $10 billion to add mental health to medicare.',
+      labelHeight: 100,
+      continue: true,
+    },
+    {
+      label: 'But it hasn\'t been made a priority in the face of other spending in the budget (like tax cuts).',
+      labelHeight: 80,
+    },
+    {
+      // label: 'Seems like a lot... do you think we\'re nearly done?',
+      label: '',
+      labelHeight: 80,
+    },
+    {
+      label: 'We\'re just reaching 21.9% of the total cost of the stage 3 tax cuts – $53 billion.',
+      labelHeight: 80,
+    },
+
+    // 53 billion = 21.9% of the cuts => shared between everyone making less than $120k per year
+    {
+      label: 'Everything we\'ve just scrolled past is going to be shared between everyone in Australia making less than $120k per year.',
+      labelHeight: 60,
+    },
+    {
+      label: 'Which means that the other 78.1% is going to everyone making more than that.',
+      labelHeight: 60,
+    },
+    {
+      label: 'Something to think about as we keep scrolling...',
+      labelHeight: 600,
+    },
+    
+
+      
     // {
     //   costThousands: 2_000_000,
     //   label: 'Westconnex motorway in Sydney (2 b)',
@@ -82,23 +118,6 @@
     //   label: 'Hosting the 2035 olympics in Brisbane (5 b)',
     //   labelHeight: 10,
     // },
-    {
-      costThousands: 10_000_000,
-      label: 'It\'s been estimated it will cost $10 billion to add mental health to medicare.',
-      labelHeight: 400,
-      continue: true,
-    },
-    {
-      label: 'Seems like a lot... do you think we\'re nearly done?',
-      labelHeight: 120,
-    },
-    {
-      label: 'Nope. we still haven’t even made it a quarter of the way through this scrolling odyssey.',
-      labelHeight: 120,
-    },
-    
-
-      
     // {
     //   costThousands: 12_000_000,
     //   label: 'Household electrification program (12 b)',
