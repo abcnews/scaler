@@ -190,7 +190,9 @@
   .block-label > p {
     position: sticky;
     top: 15px;
-    padding: 30px;
+    padding: 5px;
+    padding-left: 35px;
+    padding-right: 35px;
     font-size: 14px;
     font-weight: 600;
     text-align: center;
