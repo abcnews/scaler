@@ -1,12 +1,12 @@
 <script lang="ts">
   import { setContext } from 'svelte';
   import { writable } from 'svelte/store';
-  import { decode } from '@abcnews/base-36-props';
+  // import { decode } from '@abcnews/base-36-props';
 
-  import { Customisation } from '../types';
+  // import { Customisation } from '../types';
   import { defaultCustomisation } from '../constants';
 
-  import Scrollyteller from './Scrollyteller/Scrollyteller.svelte';
+  // import Scrollyteller from './Scrollyteller/Scrollyteller.svelte';
   import Chart from './Chart/Chart.svelte';
 
   // export let customisation: Customisation;
@@ -16,28 +16,20 @@
   const stateStore = writable<any>({ ...defaultCustomisation });
   setContext('customisation', stateStore);
 
-  let updateState = ((marker: any) => {
-    if (marker.state) {
-      const state: Partial<Customisation> = decode(marker.state);
-      stateStore.set({ ...defaultCustomisation, ...state });
-    }
-  });
+  // let updateState = ((marker: any) => {
+  //   if (marker.state) {
+  //     const state: Partial<Customisation> = decode(marker.state);
+  //     stateStore.set({ ...defaultCustomisation, ...state });
+  //   }
+  // });
 
 </script>
 
 {#if !!scrollyData}
-  <Scrollyteller
-    panels={scrollyData.panels}
-    onMarker={updateState}
-    let:height={height}
-    let:width={width}
-  >
-    <Chart
-      width={Math.min(width, 600)}
-      height={height * 0.8}
-      data={[]}
-    />
-  </Scrollyteller>
+  <Chart
+    width={800}
+    data={[]}
+  />
 {/if}
 
 <style lang="scss">

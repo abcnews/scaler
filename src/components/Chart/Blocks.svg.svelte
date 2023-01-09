@@ -193,7 +193,7 @@
     padding: 5px;
     padding-left: 35px;
     padding-right: 35px;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     text-align: center;
   }

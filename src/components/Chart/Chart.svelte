@@ -62,30 +62,30 @@
       labelHeight: 40,
     },
     {
-      label: 'Here’s how much all the people earning less than $45,000 per year combined will receive.',
+      label: 'How many of these boxes do you think will go to all the people earning less than $45,000 per year?',
       labelHeight: 40,
     },
     {
-      label: 'Actually, never mind that, they won’t see a cent of it.',
+      label: 'The answer is zero.',
       labelHeight: 40,
     },
     {
-      label: 'That means that anyone earning minimum wage at a full-time job is going to miss out entirely.',
+      label: 'Which means that anyone earning minimum wage (even at a full-time job) is going to miss out entirely.',
       labelHeight: 40,
     },
     {
       costThousands: 7_500_000,
-      label: 'This is how big the $7.5 billion allocated to cost of living relief takes up.',
+      label: 'In his budget speech, Jim Chalmers announced $7.5 billion for cost of living relief.',
       labelHeight: 80,
       continue: true,
     },
     {
-      label: 'Even it pales in comparison to what we\'re planning on spending on these tax cuts.',
-      labelHeight: 85,
+      label: 'But even $7.5 billion pales in comparison to what we\'re planning on spending on these tax cuts.',
+      labelHeight: 75,
     },
     {
       costThousands: 1_800_000,
-      label: 'So does the $1.8 billion promised for environmental and heritage protection.',
+      label: 'As does the $1.8 billion promised for environmental and heritage protection.',
       labelHeight: 85,
     },
     // {
@@ -94,25 +94,65 @@
     //   labelHeight: 80,
     // },
     {
-      label: 'We\'re just reaching 21.9% of the total cost of the stage 3 tax cuts – $53 billion.',
-      labelHeight: 90,
+      label: 'So, these tax cuts are going to cost a lot, but that\'s not really the problem.',
+      labelHeight: 100
     },
 
     // 53 billion = 21.9% of the cuts => shared between everyone making less than $120k per year
+
     {
-      label: 'That is how much is going to be shared between every single person in Australia who makes less than $120k per year.',
+      label: 'We\'ve just reached the $53 billion mark (21.9%) of the cost of the stage 3 tax cuts.',
+      labelHeight: 90,
+    },
+
+    {
+      label: 'That $53 billion will go to those making less than $120k per year, which might seem like a lot...',
       labelHeight: 60,
     },
     {
-      label: 'Which means that the other 78.1% is going to everyone making more than that.',
+      label: 'But consider this: the rest of it ($189 billion) will be going to people with high incomes. That is, those making over 120k per year.',
       labelHeight: 60,
     },
     {
       label: 'Something to think about as we keep scrolling...',
-      labelHeight: 600,
+      labelHeight: 400,
+    },
+    {
+      label: '...and scrolling...',
+      labelHeight: 400,
+    },
+    {
+      label: '...and scrolling past the money going to people making more than $120k per year.',
+      labelHeight: 400,
+    },
+    {
+      label: 'Remember when the government spent $5 billion on not buying nuclear submarines from France?',
+      costThousands: 5_000_000,
+      labelHeight: 40,
+      continue: true,
+    },
+    {
+      label: 'That\'s a lot of money to spend on nothing.',
+      labelHeight: 40,
+    },
+    {
+      label: 'Especially when you compare it to the $220k the BoM spent on their ill-fated rebrand to "The Bureau".',
+      costThousands: 220,
+      labelHeight: 60,
+    },
+    {
+      label: 'And yet, Environment Minister Tanya Plibersek panned the move as "ridiculous", and said, "I have asked for the information about the full cost of the whole rebrand project."',
+      labelHeight: 60,
+    },
+    {
+      label: 'If she gets that worked up over $220k, why isn\'t the government getting even more worked up over the $243 billion set to be spent on tax cuts that will overwhelmingly benefit high-income earners?',
+      labelHeight: 60,
+    },
+    {
+      label: 'What you do you think? The stage 3 tax cuts - responsible or reckless?',
+      labelHeight: 60,
     },
     
-
       
     // {
     //   costThousands: 2_000_000,

@@ -163,7 +163,6 @@
 
   figure {
     margin: auto;
-    height: 80vh;
   }
 
   aside {
