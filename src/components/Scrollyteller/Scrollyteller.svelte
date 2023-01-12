@@ -62,7 +62,7 @@
 >
   <Chart
     data={chartData}
-    {width}
+    width={Math.min(1200, width)}
   />
 </div>
 

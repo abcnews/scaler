@@ -74,6 +74,12 @@
     return {
       destroy() {
         chn.forEach((node) => el.removeChild(node));
+      },
+      // If text in panels changes, re-render the blocks
+      update(newChn) {
+        chn.forEach((node) => el.removeChild(node));
+        newChn.forEach((node) => el.appendChild(node));
+        chn = newChn;
       }
     };
   };
@@ -190,6 +196,7 @@
           class="block-label"
           use:children={block.item.nodes || []}
         />
+        <div style="display:none;">{block.item.nodeHash}</div>
       </div>
     {/each}
   </div>

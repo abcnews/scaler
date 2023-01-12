@@ -1,6 +1,5 @@
 <script lang="ts">
   import acto from '@abcnews/alternating-case-to-object';
-  // import { encode, decode } from '@abcnews/base-36-props';
   import { getContext } from 'svelte';
   import Chart from '../Chart/Chart.svelte';
 
@@ -31,6 +30,7 @@
       const p = document.createElement('p');
       p.innerHTML = line;
       acc[acc.length - 1].nodes = [p];
+      // acc[acc.length - 1].nodeHash = encode(p.innerHTML);
       return acc;
     },
     []

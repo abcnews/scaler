@@ -159,6 +159,11 @@
   }
 
   aside {
+    position: fixed;
+    right: 0;
+    top: 0;
+    background: white;
+
     flex: 1 1 100%;
     border-top: 2px solid #e0e0e0;
     width: 100%;

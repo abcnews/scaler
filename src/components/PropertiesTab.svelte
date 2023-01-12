@@ -14,7 +14,7 @@
       <TextArea labelText="" bind:value={$customisation.intro} rows={12} />
     </AccordionItem>
     <AccordionItem title="Body" open>
-      <TextArea labelText="" bind:value={$customisation.text} rows={300} />
+      <TextArea labelText="" bind:value={$customisation.text} rows={45} />
     </AccordionItem>
 
   </Accordion>
