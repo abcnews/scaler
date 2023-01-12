@@ -7,8 +7,6 @@
   import Tab from 'carbon-components-svelte/src/Tabs/Tab.svelte';
   import TabContent from 'carbon-components-svelte/src/Tabs/TabContent.svelte';
 
-  import MarkersTab from './MarkersTab.svelte';
-
   import '../../builder.scss';
 
   let height: number;
@@ -126,11 +124,9 @@
 
   <aside>
     <Tabs autoWidth>
-      <Tab label="Properties" />
-      <Tab label="Markers" />
+      <Tab label="Inputs" />
       <svelte:fragment slot="content">
         <TabContent><slot name="properties" /></TabContent>
-        <TabContent><MarkersTab {storeName} stateDiff={stateDiff($stateStore)} /></TabContent>
       </svelte:fragment>
     </Tabs>
   </aside>
@@ -138,9 +134,6 @@
 
 
 <style lang="scss">
-  :global(aside) {
-    display: none;
-  }
   :global(body) {
     margin: 0;
   }
@@ -178,7 +171,6 @@
       border-top: 0;
       border-left: 2px solid #e0e0e0;
       max-width: 32rem;
-      max-height: 100vh;
       overflow-x: hidden;
       overflow-y: scroll;
     }

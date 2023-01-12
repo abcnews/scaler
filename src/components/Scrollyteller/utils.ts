@@ -1,9 +1,9 @@
 import acto from '@abcnews/alternating-case-to-object';
 import { selectMounts, isMount, getMountValue } from '@abcnews/mount-utils';
-import type { PanelDefinition, ScrollytellerDefinition, PanelAlignment } from './types';
+import type { PanelDefinition, ScalerDefinition, PanelAlignment } from './types';
 
 const piecemeal = Symbol('piecemeal');
-const SELECTOR_COMMON = 'scrollyteller';
+const SELECTOR_COMMON = 'scaler';
 
 type PanelMeta = {
 	[piecemeal]?: boolean;
@@ -11,7 +11,7 @@ type PanelMeta = {
 };
 declare global {
 	interface Window {
-		__scrollytellers: {
+		__scalers: {
 			[key: string]: any;
 		};
 	}
@@ -29,23 +29,23 @@ function excludePanelMeta(config: PanelMeta) {
 }
 
 /**
- * Finds and grabs any nodes between #scrollyteller and #endscrollyteller
- * @param name The hash name for a scrollyteller (optional if there is only one on the page)
+ * Finds and grabs any nodes between #scaler and #endscaler
+ * @param name The hash name for a scaler (optional if there is only one on the page)
  * @param className The className to apply to the mount node
  * @param markerName The hash name for markers
  */
-export const loadScrollyteller = (
+export const loadScaler = (
 	name?: string,
 	className?: string,
 	markerName = 'mark'
-): ScrollytellerDefinition => {
-	window.__scrollytellers = window.__scrollytellers || {};
+): ScalerDefinition => {
+	window.__scalers = window.__scalers || {};
 
 	const openingMountValuePrefix = `${SELECTOR_COMMON}${name ? `NAME${name}` : ''}`;
 
-	name = name || 'scrollyteller';
+	name = name || 'scaler';
 
-	if (!window.__scrollytellers[name]) {
+	if (!window.__scalers[name]) {
 		const firstEl: Element | null = selectMounts(openingMountValuePrefix)[0];
 
 		if (!firstEl) {
@@ -72,13 +72,13 @@ export const loadScrollyteller = (
 			}
 		}
 
-		window.__scrollytellers[name] = {
+		window.__scalers[name] = {
 			mountNode: firstEl,
 			panels: loadPanels(els, config, markerName)
 		};
 	}
 
-	return window.__scrollytellers[name];
+	return window.__scalers[name];
 };
 
 /**

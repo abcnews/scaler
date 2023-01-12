@@ -1,4 +1,4 @@
 import Scrollyteller from './Scrollyteller.svelte';
-export { loadScrollyteller } from './utils';
+export { loadScaler } from './utils';
 
 export default Scrollyteller;

@@ -1,6 +1,8 @@
 import { Customisation } from './types';
 
 export const defaultCustomisation: Customisation = {
+  text: '',
+  intro: '',
 };
 
 export const TOTAL_AREA = 243_000_000; // in thousands

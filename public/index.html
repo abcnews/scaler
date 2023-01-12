@@ -7,15 +7,27 @@
     <!-- If you add `extractCSS:true` to your build config, add the <link> below -->
     <!-- <link rel="stylesheet" href="index.css" /> -->
     <link rel="stylesheet" href="https://www.abc.net.au/res/fonts/abcsans/font.css" />
+    <link rel="stylesheet" href="https://www.abc.net.au/res/fonts/abcserif/abcserif-regular.woff2" />
+    <link rel="stylesheet" href="https://www.abc.net.au/res/fonts/abcserif/abcserif-bold.woff2" />
     <script src="builder.js"></script>
     <!-- If you add `addModernJS:true` to your build config, replace the <script> above with the ones below -->
     <!-- <script type="module" src="index_modern.js"></script> -->
     <!-- <script nomodule src="index.js"></script> -->
     <style>
       .lead {
-        max-width: 52rem;
         padding: 10px;
         margin: auto;
+        background: #f4f4f4;
+        text-align: center;
+        border-bottom: solid #e0e0e0 1px;
+      }
+
+      .lead > h1 {
+        margin: 0;
+        font-family: "ABCSerif","Book Antiqua","Palatino Linotype",Palatino,serif;
+        font-size: 2rem;
+        letter-spacing: normal;
+        font-weight: bold;
       }
 
       body {
@@ -24,74 +36,11 @@
     </style>
   </head>
   <body>
-
     <div class="lead">
-      <h1>Tax cuts to scale</h1>
-
-      <p>
-      When Jim Chalmers made his budget speech to parliament in October, he promised the spending was going to be “responsible, not reckless.”
-      </p>
-      <p>
-
-        Then he threw out a bunch of figures, most of which were in the billions. 
-        <!-- Child care, cost-of-living relief, fee-free TAFE. -->
-      </p>
-
-      <p>
-        We’re used to working with budgets in the hundreds and thousands of dollars – for the lucky among us, we'll buy a house for more than a million from time to time.
-      </p>
-
-      <p>
-        But when prices get much bigger than that, we lose all sense of scale.
-      </p>
-
-      <p>
-        How are we to judge whether spending in the billions is "responsible" or "reckless"?
-      </p>
-
-      <p>
-      <!-- Last year, the BoM announced an unfortunate rebrand that was universally <a href="https://www.theguardian.com/australia-news/2022/oct/19/bom-rebranding-logo-cost-220k-australia-weather-bureau-of-meteorology-name-change-tanya-plibersek">condemned</a> as <a href="https://www.smh.com.au/national/220k-bureau-of-meteorology-rebranding-ridiculous-says-plibersek-20221019-p5br65.html">wasteful</a> <a href="https://www.abc.net.au/news/2022-10-19/bureau-meteorology-rebrand-cost-200-thousand/101552620">spending</a>. -->
-      </p>
-
-      <p>
-      <!-- It cost a meagre $220 thousand. -->
-      </p>
-      <p>
-      <!-- Compare that to the $5 billion we spent <a href="https://www.abc.net.au/news/2022-04-01/cancelled-french-submarine-program-cost-billions/100959082">not buying</a> nuclear submarines from France, and, well, you can’t really. You could rebrand the BoM once a day for 68 years for that. -->
-      </p>
-
-      <p>
-        One of the most controvserial items on the government's balance sheet – the coming stage 3 tax cuts – are estimated to cost $243 billion over the next ten years.
-      </p>
-
-      <p>
-        That's more than double the amount earmarked for transport infrastructure over the same time period.
-      </p>
-
-      <p>
-        It would take the average Australian over two million years to earn that much at their day job. Or, if we were in a James Bond movie, it’d fill about <a href="https://tvtropes.org/pmwiki/pmwiki.php/Main/BriefcaseFullOfMoney">one thousand briefcases stacked with $100 bills</a>.
-      </p>
-
-      <p>
-        If those comparisons aren't helping, let's see if we can do better. Let's try to put $243 billion into perspective.
-      </p>
+      <h1>Scaler Builder</h1>
     </div>
     
     <div data-mount id="index"></div>
-
-    <div class="lead">
-      <p>
-        After all that scrolling, maybe you’d prefer to just divide it up equally, and take the $10k each. And fair enough – maybe you’d find a better use for your cash than any of these government programs.
-      </p>
-
-      <p>
-        There are many ways this money could be spent, and everyone will have their own preferences.
-      </p>
-
-      <p>
-        Whatever we choose, the responsible thing to do would be to avoid spending $243 billion on increasing inequality.
-      </p>
-    </div>
 
     <!-- Mock Odyssey's loaded event so the `whenOdysseyLoaded` promise resolves -->
     <script>

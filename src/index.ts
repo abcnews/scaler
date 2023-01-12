@@ -7,7 +7,7 @@ import { whenDOMReady, whenOdysseyLoaded } from '@abcnews/env-utils';
 import { getMountValue, selectMounts } from '@abcnews/mount-utils';
 import type { Mount } from '@abcnews/mount-utils';
 
-import { loadScrollyteller } from './components/Scrollyteller';
+import { loadScaler } from './components/Scrollyteller';
 
 import ScrollyWrapper from './components/ScrollyWrapper.svelte';
 
@@ -30,7 +30,7 @@ const mountComponents = (name: string, Component: typeof SvelteComponent, props?
 
 Promise.all([
   whenOdysseyLoaded,
-  proxy('interactive'),
+  proxy('scaler'),
 ]).then(() => {
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -41,7 +41,7 @@ Promise.all([
   }
 
   try {
-    const scrollyData = loadScrollyteller('chart1', 'u-full', 'mark');
+    const scrollyData = loadScaler('main', 'u-full', 'mark');
     const appMountEl = scrollyData.mountNode;
 
     if (appMountEl) {

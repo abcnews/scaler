@@ -12,7 +12,7 @@ export interface PanelDefinition {
   steps?: PanelRef[],
 }
 
-export type ScrollytellerDefinition = {
+export type ScalerDefinition = {
 	mountNode: Element;
 	panels: PanelDefinition[];
 };

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getContext } from 'svelte';
+  import type { Action } from 'svelte/action';
   import { Svg, Html } from 'layercake';
 
   import { NUM_COLUMNS, COLOURS, GRID_PADDING, FIRST_DIVIDER, ROWS_PER_MARKER, SQUARE_VALUE, FIRST_MARKER_VALUE } from '../../constants';
@@ -15,6 +16,7 @@
 
   // How many pixels wide each box in the grid is
   $: gridSize = Math.floor($width / NUM_COLUMNS);
+  $: gridOverflow = $width - gridSize * NUM_COLUMNS;
 
   // Leave one block of gutter on each side
   $: numBlocksPerRow = Math.floor($width / gridSize) - 2;
@@ -65,6 +67,16 @@
       // progressLabel: Math.max(progressLabel + newBlock.labelHeight, progress + h) + gridSize * 2,
     };
   }, { progress: 0, blocks: [] }).blocks;
+
+  const children: Action<Element, Node[]> = (el, chn) => {
+    chn.forEach((node) => el.appendChild(node));
+
+    return {
+      destroy() {
+        chn.forEach((node) => el.removeChild(node));
+      }
+    };
+  };
 </script>
 
 <Svg>
@@ -89,13 +101,14 @@
     >
   </pattern>
 
-  <rect
-    x={0}
-    y={0}
-    height={$height}
-    width={NUM_COLUMNS * gridSize}
-    fill={'url(#pattern-grid-bg)'}
-  />
+  <g style="transform: translateX({gridOverflow / 2}px);">
+    <rect
+      x={0}
+      y={0}
+      height={$height}
+      width={NUM_COLUMNS * gridSize}
+      fill={'url(#pattern-grid-bg)'}
+    />
 
     {#each blocks as block}
       <rect
@@ -125,36 +138,38 @@
       {/if}
     {/each}
 
-  <!-- Waypoint markers for how much $$$ has been scrolled past -->
-  {#if $height}
-    {#each Array(Math.floor($height / (gridSize * ROWS_PER_MARKER))) as _, i}
-      {#if (i * SQUARE_VALUE * NUM_COLUMNS / 100) > FIRST_MARKER_VALUE}
-        <text
-          x={0}
-          y={i * gridSize * ROWS_PER_MARKER + gridSize / 2}
-        >
-          ${i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER / 100 / 100 / 100}b
-        </text>
-      {/if}
-    {/each}
-  {/if}
+    <!-- Waypoint markers for how much $$$ has been scrolled past -->
+    {#if $height}
+      {#each Array(Math.floor($height / (gridSize * ROWS_PER_MARKER))) as _, i}
+        {#if (i * SQUARE_VALUE * NUM_COLUMNS / 100) > FIRST_MARKER_VALUE}
+          <text
+            class="waypoint"
+            x={0}
+            y={i * gridSize * ROWS_PER_MARKER + gridSize / 2}
+          >
+            ${i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER / 100 / 100 / 100}b
+          </text>
+        {/if}
+      {/each}
+    {/if}
 
-  <text
-    x={0}
-    y={Math.round(1000 * FIRST_DIVIDER / (NUM_COLUMNS * SQUARE_VALUE)) * gridSize - 5}
-    style="
-      font-size: 18px;
-    "
-  >
-    $53 billion
-  </text>
-  <rect
-    x={-20}
-    y={Math.round(1000 * FIRST_DIVIDER / (NUM_COLUMNS * SQUARE_VALUE)) * gridSize}
-    width={NUM_COLUMNS * gridSize + 40}
-    height={6}
-    fill={'black'}
-  />
+    <text
+      x={0}
+      y={Math.round(1000 * FIRST_DIVIDER / (NUM_COLUMNS * SQUARE_VALUE)) * gridSize - 5}
+      style="
+        font-size: 18px;
+      "
+    >
+      $53 billion
+    </text>
+    <rect
+      x={-20}
+      y={Math.round(1000 * FIRST_DIVIDER / (NUM_COLUMNS * SQUARE_VALUE)) * gridSize}
+      width={NUM_COLUMNS * gridSize + 40}
+      height={6}
+      fill={'black'}
+    />
+  </g>
 </Svg>
 
 <Html>
@@ -167,13 +182,14 @@
           top: {block.labelTop}px;
           height: {block.labelHeight}px;
           width: {block.width}px;
-          left: {gridSize}px;
+          left: {gridSize + gridOverflow / 2}px;
           margin: 0px;
         "
       >
-        <div class="block-label">
-          <p>{block.item.label}</p>
-        </div>
+        <div
+          class="block-label"
+          use:children={block.item.nodes || []}
+        />
       </div>
     {/each}
   </div>
@@ -187,7 +203,7 @@
     height: 100%;
     position: relative;
   }
-  .block-label > p {
+  :global(.block-label > p) {
     position: sticky;
     top: 15px;
     padding: 5px;
@@ -196,5 +212,8 @@
     font-size: 15px;
     font-weight: 600;
     text-align: center;
+  }
+  .waypoint {
+    font-family: ABCSans, Helvetica, sans-serif;
   }
 </style>

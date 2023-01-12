@@ -1,34 +1,12 @@
 <script lang="ts">
-  import { setContext } from 'svelte';
-  import { writable } from 'svelte/store';
-  // import { decode } from '@abcnews/base-36-props';
+  import Scrollyteller from './Scrollyteller/Scrollyteller.svelte';
 
-  // import { Customisation } from '../types';
-  import { defaultCustomisation } from '../constants';
-
-  // import Scrollyteller from './Scrollyteller/Scrollyteller.svelte';
-  import Chart from './Chart/Chart.svelte';
-
-  // export let customisation: Customisation;
   export let scrollyData: any;
-
-  // Create store for controlling the chart
-  const stateStore = writable<any>({ ...defaultCustomisation });
-  setContext('customisation', stateStore);
-
-  // let updateState = ((marker: any) => {
-  //   if (marker.state) {
-  //     const state: Partial<Customisation> = decode(marker.state);
-  //     stateStore.set({ ...defaultCustomisation, ...state });
-  //   }
-  // });
-
 </script>
 
 {#if !!scrollyData}
-  <Chart
-    width={800}
-    data={[]}
+  <Scrollyteller
+    panels={scrollyData.panels}
   />
 {/if}
 
