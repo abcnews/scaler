@@ -11,10 +11,10 @@
 <div>
   <Accordion>
     <AccordionItem title="Intro">
-      <TextArea labelText="" bind:value={$customisation.intro} rows={12} />
+      <TextArea labelText="" bind:value={$customisation.intro} rows={30} />
     </AccordionItem>
     <AccordionItem title="Body" open>
-      <TextArea labelText="" bind:value={$customisation.text} rows={45} />
+      <TextArea labelText="" bind:value={$customisation.text} rows={30} />
     </AccordionItem>
 
   </Accordion>

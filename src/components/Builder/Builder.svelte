@@ -144,6 +144,7 @@
     justify-content: center;
     align-items: stretch;
     min-height: 100vh;
+    margin-right: 32rem;
   }
 
   article {
