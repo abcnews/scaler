@@ -3,7 +3,19 @@
   import type { Action } from 'svelte/action';
   import { Svg, Html } from 'layercake';
 
-  import { NUM_COLUMNS, COLOURS, GRID_PADDING, FIRST_DIVIDER, ROWS_PER_MARKER, SQUARE_VALUE, FIRST_MARKER_VALUE } from '../../constants';
+  import {
+    NUM_COLUMNS,
+    COLOURS,
+    GRID_PADDING,
+    FIRST_DIVIDER,
+    FIRST_DIVIDER_ROWS,
+    ROWS_PER_MARKER,
+    SQUARE_VALUE,
+    FIRST_MARKER_VALUE
+  } from '../../constants';
+
+  import Grid from './Grid.svg.svelte';
+  import Divider from './Divider.svelte';
 
   interface Marker {
     costThousands: number;
@@ -17,9 +29,12 @@
   // How many pixels wide each box in the grid is
   $: gridSize = Math.floor($width / NUM_COLUMNS);
   $: gridOverflow = $width - gridSize * NUM_COLUMNS;
+  $: totalRows = $height / gridSize;
 
   // Leave one block of gutter on each side
   $: numBlocksPerRow = Math.floor($width / gridSize) - 2;
+
+  $: dividerRow = Math.round(1000 * FIRST_DIVIDER / (NUM_COLUMNS * SQUARE_VALUE));
 
   $: blocks = $data.reduce(({ progress, progressLabel, blocks }, item: Marker) => {
     const total = item.costThousands || 0;
@@ -87,16 +102,6 @@
 
 <Svg>
 
-  <pattern id="pattern-grid-bg" x="0" y="0" width={gridSize} height={gridSize} patternUnits="userSpaceOnUse">
-    <rect
-      x={GRID_PADDING / 2}
-      y={GRID_PADDING / 2}
-      width={gridSize - GRID_PADDING}
-      height={gridSize - GRID_PADDING}
-      fill={COLOURS.bg}
-    >
-  </pattern>
-
   <pattern id="pattern-grid-block" x="0" y="0" width={gridSize} height={gridSize} patternUnits="userSpaceOnUse">
     <rect
       x={GRID_PADDING / 2}
@@ -108,14 +113,37 @@
   </pattern>
 
   <g style="transform: translateX({gridOverflow / 2}px);">
-    <rect
-      x={0}
-      y={0}
-      height={$height}
-      width={NUM_COLUMNS * gridSize}
-      fill={'url(#pattern-grid-bg)'}
+
+    <!-- Background grid before divider -->
+    <Grid
+      id="bg"
+      heightBlocks={dividerRow - 1}
+      widthBlocks={NUM_COLUMNS}
+      offsetBlocks={0}
+      {gridSize}
+      colour={COLOURS.bg}
     />
 
+    <!-- Divider background -->
+    <rect
+      x={0}
+      y={(dividerRow) * gridSize}
+      height={FIRST_DIVIDER_ROWS * gridSize}
+      width={NUM_COLUMNS * gridSize}
+      fill={'#f9f9f9'}
+    />
+
+    <!-- Background grid after divider -->
+    <Grid
+      id="bg2"
+      heightBlocks={totalRows - dividerRow - FIRST_DIVIDER_ROWS}
+      widthBlocks={NUM_COLUMNS}
+      offsetBlocks={dividerRow + FIRST_DIVIDER_ROWS - 1}
+      {gridSize}
+      colour={COLOURS.bg}
+    />
+
+    <!-- Blocks (don't refactor until we've decided on gutters + alignment) -->
     {#each blocks as block}
       <rect
         x={gridSize}
@@ -147,34 +175,38 @@
     <!-- Waypoint markers for how much $$$ has been scrolled past -->
     {#if $height}
       {#each Array(Math.floor($height / (gridSize * ROWS_PER_MARKER))) as _, i}
-        {#if (i * SQUARE_VALUE * NUM_COLUMNS / 100) > FIRST_MARKER_VALUE}
+
+        <!-- Before divider -->
+        {#if (i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER) > FIRST_MARKER_VALUE && (i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER / 100 / 10) < FIRST_DIVIDER}
+          <rect
+            x={-30}
+            y={i * gridSize * ROWS_PER_MARKER}
+            width={60}
+            height={2}
+            fill="black"
+          />
+          <text
+            class="waypoint"
+            x={-5}
+            y={i * gridSize * ROWS_PER_MARKER - 5}
+          >
+            ${i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER / 100 / 100 / 100} billion
+          </text>
+        {/if}
+
+        <!-- After divider -->
+        {#if (i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER / 100 / 10) >= FIRST_DIVIDER}
           <text
             class="waypoint"
             x={0}
-            y={i * gridSize * ROWS_PER_MARKER + gridSize / 2}
+            y={i * gridSize * ROWS_PER_MARKER + gridSize / 2 + FIRST_DIVIDER_ROWS * gridSize}
           >
-            ${i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER / 100 / 100 / 100}b
+            ${i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER / 100 / 100 / 100} billion
           </text>
         {/if}
       {/each}
     {/if}
 
-    <text
-      x={0}
-      y={Math.round(1000 * FIRST_DIVIDER / (NUM_COLUMNS * SQUARE_VALUE)) * gridSize - 5}
-      style="
-        font-size: 18px;
-      "
-    >
-      $53 billion
-    </text>
-    <rect
-      x={-20}
-      y={Math.round(1000 * FIRST_DIVIDER / (NUM_COLUMNS * SQUARE_VALUE)) * gridSize}
-      width={NUM_COLUMNS * gridSize + 40}
-      height={6}
-      fill={'black'}
-    />
   </g>
 </Svg>
 
@@ -190,6 +222,7 @@
           width: {block.width}px;
           left: {gridSize + gridOverflow / 2}px;
           margin: 0px;
+          z-index: 10000;
         "
       >
         <div
@@ -200,6 +233,14 @@
       </div>
     {/each}
   </div>
+
+  <Divider
+    offsetValue={FIRST_DIVIDER}
+    heightBlocks={FIRST_DIVIDER_ROWS}
+    {gridSize}
+    {gridOverflow}
+    label="$53 billion"
+  />
 </Html>
 
 <style>
@@ -212,8 +253,7 @@
   }
   :global(.block-label > p) {
     position: sticky;
-    top: 15px;
-    padding: 5px;
+    top: 120px; /* This is how far from the top it sticks when scrolled past */
     padding-left: 35px;
     padding-right: 35px;
     font-size: 15px;
@@ -222,5 +262,7 @@
   }
   .waypoint {
     font-family: ABCSans, Helvetica, sans-serif;
+    font-size: 15px;
+    text-anchor: end;
   }
 </style>
