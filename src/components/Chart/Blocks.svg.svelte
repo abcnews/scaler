@@ -9,9 +9,10 @@
     GRID_PADDING,
     FIRST_DIVIDER,
     FIRST_DIVIDER_ROWS,
+    FIRST_DIVIDER_BARS,
     ROWS_PER_MARKER,
+    TOTAL_VALUE,
     SQUARE_VALUE,
-    FIRST_MARKER_VALUE
   } from '../../constants';
 
   import Grid from './Grid.svg.svelte';
@@ -25,30 +26,30 @@
   }
 
   const { data, height, width } = getContext('LayerCake');
+  export let gridSize: number;
 
   // How many pixels wide each box in the grid is
-  $: gridSize = Math.floor($width / NUM_COLUMNS);
   $: gridOverflow = $width - gridSize * NUM_COLUMNS;
   $: totalRows = $height / gridSize;
 
   // Leave one block of gutter on each side
   $: numBlocksPerRow = Math.floor($width / gridSize) - 2;
 
-  $: dividerRow = Math.round(1000 * FIRST_DIVIDER / (NUM_COLUMNS * SQUARE_VALUE));
+  $: dividerRow = Math.round(FIRST_DIVIDER / (NUM_COLUMNS * SQUARE_VALUE));
 
   $: blocks = $data.reduce(({ progress, progressLabel, blocks }, item: Marker) => {
     const total = item.costThousands || 0;
-    const numBlocks = total / SQUARE_VALUE;
+    const numBlocks = total / (1000 * SQUARE_VALUE);
 
     const numRows = Math.max(Math.ceil(numBlocks / numBlocksPerRow), 1);
 
     const h = numRows * gridSize;
     const w = numBlocksPerRow * gridSize;
 
-    const valueFromFullRows = (numRows - 1) * SQUARE_VALUE * numBlocksPerRow;
-    const finalRowBlocks = Math.floor((total - valueFromFullRows) / SQUARE_VALUE);
-    const valueFromFullBlocks = valueFromFullRows + finalRowBlocks * SQUARE_VALUE;
-    const finalBlockPixels = Math.ceil((total - valueFromFullBlocks) / SQUARE_VALUE * (gridSize - GRID_PADDING));
+    const valueFromFullRows = (numRows - 1) * (1000 * SQUARE_VALUE) * numBlocksPerRow;
+    const finalRowBlocks = Math.floor((total - valueFromFullRows) / (1000 * SQUARE_VALUE));
+    const valueFromFullBlocks = valueFromFullRows + finalRowBlocks * (1000 * SQUARE_VALUE);
+    const finalBlockPixels = Math.ceil((total - valueFromFullBlocks) / (1000 * SQUARE_VALUE) * (gridSize - GRID_PADDING));
 
     const newBlock = {
       width: w,
@@ -81,7 +82,7 @@
       progressLabel: progress + Math.max(h, newBlock.labelHeight) + gridSize * 2,
       // progressLabel: Math.max(progressLabel + newBlock.labelHeight, progress + h) + gridSize * 2,
     };
-  }, { progress: 0, blocks: [] }).blocks;
+  }, { progress: 0, progressTop: 0, blocks: [] }).blocks;
 
   const children: Action<Element, Node[]> = (el, chn) => {
     chn.forEach((node) => el.appendChild(node));
@@ -136,7 +137,7 @@
     <!-- Background grid after divider -->
     <Grid
       id="bg2"
-      heightBlocks={totalRows - dividerRow - FIRST_DIVIDER_ROWS}
+      heightBlocks={totalRows - dividerRow - FIRST_DIVIDER_ROWS + 1}
       widthBlocks={NUM_COLUMNS}
       offsetBlocks={dividerRow + FIRST_DIVIDER_ROWS - 1}
       {gridSize}
@@ -173,39 +174,27 @@
     {/each}
 
     <!-- Waypoint markers for how much $$$ has been scrolled past -->
-    {#if $height}
-      {#each Array(Math.floor($height / (gridSize * ROWS_PER_MARKER))) as _, i}
-
-        <!-- Before divider -->
-        {#if (i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER) > FIRST_MARKER_VALUE && (i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER / 100 / 10) < FIRST_DIVIDER}
-          <rect
-            x={-30}
-            y={i * gridSize * ROWS_PER_MARKER}
-            width={60}
-            height={2}
-            fill="black"
-          />
-          <text
-            class="waypoint"
-            x={-5}
-            y={i * gridSize * ROWS_PER_MARKER - 5}
-          >
-            ${i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER / 100 / 100 / 100} billion
-          </text>
-        {/if}
-
-        <!-- After divider -->
-        {#if (i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER / 100 / 10) >= FIRST_DIVIDER}
-          <text
-            class="waypoint"
-            x={0}
-            y={i * gridSize * ROWS_PER_MARKER + gridSize / 2 + FIRST_DIVIDER_ROWS * gridSize}
-          >
-            ${i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER / 100 / 100 / 100} billion
-          </text>
-        {/if}
-      {/each}
-    {/if}
+    <!-- {#if $height} -->
+    <!--   {#each Array(Math.floor($height / (gridSize * ROWS_PER_MARKER))) as _, i} -->
+    <!--  -->
+    <!--     {#if (i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER) >= FIRST_DIVIDER &#38;&#38; (i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER) <= TOTAL_VALUE} -->
+    <!--       <rect -->
+    <!--         x={-30} -->
+    <!--         y={i * gridSize * ROWS_PER_MARKER + FIRST_DIVIDER_ROWS * gridSize} -->
+    <!--         width={60} -->
+    <!--         height={2} -->
+    <!--         fill="black" -->
+    <!--       /> -->
+    <!--       <text -->
+    <!--         class="waypoint" -->
+    <!--         x={-5} -->
+    <!--         y={i * gridSize * ROWS_PER_MARKER + FIRST_DIVIDER_ROWS * gridSize - 5} -->
+    <!--       > -->
+    <!--         ${i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER / 10 / 100} billion -->
+    <!--       </text> -->
+    <!--     {/if} -->
+    <!--   {/each} -->
+    <!-- {/if} -->
 
   </g>
 </Svg>
@@ -223,6 +212,7 @@
           left: {gridSize + gridOverflow / 2}px;
           margin: 0px;
           z-index: 10000;
+          --bar-offset: {gridSize * FIRST_DIVIDER_BARS + 40}px;
         "
       >
         <div
@@ -237,6 +227,7 @@
   <Divider
     offsetValue={FIRST_DIVIDER}
     heightBlocks={FIRST_DIVIDER_ROWS}
+    numBars={FIRST_DIVIDER_BARS}
     {gridSize}
     {gridOverflow}
     label="$53 billion"
@@ -253,16 +244,19 @@
   }
   :global(.block-label > p) {
     position: sticky;
-    top: 120px; /* This is how far from the top it sticks when scrolled past */
+
+    /* This is how far from the top it sticks when scrolled past */
+    top: var(--bar-offset);
+
     padding-left: 35px;
     padding-right: 35px;
     font-size: 15px;
     font-weight: 600;
     text-align: center;
   }
-  .waypoint {
-    font-family: ABCSans, Helvetica, sans-serif;
-    font-size: 15px;
-    text-anchor: end;
-  }
+  /* .waypoint { */
+  /*   font-family: ABCSans, Helvetica, sans-serif; */
+  /*   font-size: 15px; */
+  /*   text-anchor: end; */
+  /* } */
 </style>

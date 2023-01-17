@@ -12,12 +12,13 @@
   export let gridSize: number;
   export let gridOverflow: number;
   export let label: string;
+  export let numBars: number;
 </script>
 
 <div
   style="
     position: relative;
-    top: {(Math.round(1000 * offsetValue / (NUM_COLUMNS * SQUARE_VALUE)) - 1) * gridSize}px;
+    top: {(Math.round(offsetValue / (NUM_COLUMNS * SQUARE_VALUE)) - 1) * gridSize}px;
     left: 0;
     width: {NUM_COLUMNS * gridSize + 40}px;
     height: {gridSize * heightBlocks}px;
@@ -30,7 +31,8 @@
       top: 0px;
       left: 0px;
       width: 100%;
-      height: {2 * gridSize}px;
+      height: {numBars * gridSize}px;
+      z-index: 6;
     "
   >
     <svg style="width:100%;height:100%;">
@@ -38,7 +40,7 @@
         <Grid
           id="bg-floating"
           offsetBlocks={0}
-          heightBlocks={2}
+          heightBlocks={numBars}
           widthBlocks={NUM_COLUMNS}
           colour={COLOURS.bg}
           {gridSize}
@@ -49,7 +51,7 @@
     <div
       style="
         position: absolute;
-        top: {2 * gridSize - 22}px;
+        top: {numBars * gridSize - 22}px;
         font-size: 18px;
       "
     >
@@ -58,7 +60,7 @@
     <div
       style="
         position: absolute;
-        top: {2 * gridSize}px;
+        top: {numBars * gridSize}px;
         left: -20px;
         height: 6px;
         width: 100%;
@@ -66,6 +68,35 @@
       "
     />
   </div>
+
+  <div style="height:{gridSize * (heightBlocks - numBars * 2)}px; width:100%;" />
+
+  <div
+    style="
+      position: sticky;
+      position: -webkit-sticky;
+      bottom: 0px;
+      left: 0px;
+      width: 100%;
+      height: {numBars * gridSize}px;
+      z-index: 5;
+    "
+  >
+    <svg style="width:100%;height:100%;">
+      <g style="transform: translateX({gridOverflow / 2}px);">
+        <Grid
+          id="bg-floating"
+          offsetBlocks={0}
+          heightBlocks={numBars}
+          widthBlocks={NUM_COLUMNS}
+          colour={COLOURS.bg}
+          {gridSize}
+        />
+      </g>
+    </svg>
+  </div>
+
+
 </div>
 
 <style>

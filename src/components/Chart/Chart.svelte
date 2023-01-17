@@ -1,6 +1,6 @@
 <script lang="ts">
   import { LayerCake } from 'layercake';
-  import { NUM_COLUMNS, SQUARE_VALUE, FIRST_DIVIDER_ROWS } from '../../constants';
+  import { TOTAL_VALUE, NUM_COLUMNS, SQUARE_VALUE, FIRST_DIVIDER_ROWS } from '../../constants';
 
   import Blocks from './Blocks.svg.svelte';
 
@@ -9,7 +9,6 @@
 
   export let width: number;
   export let padding = { top: 0, bottom: 0, left: 0, right: 0 };
-  const TOTAL_VALUE = 243_000_000;
 
   $: numSquares = TOTAL_VALUE / SQUARE_VALUE;
   $: numRows = Math.ceil(numSquares / NUM_COLUMNS);
@@ -37,7 +36,7 @@
       {data}
     >
 
-      <Blocks />
+      <Blocks {gridSize} />
     </LayerCake>
   {/if}
 </div>
