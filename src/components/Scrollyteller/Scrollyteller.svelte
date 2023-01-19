@@ -7,41 +7,33 @@
 </script>
 
 <script lang="ts">
-	import { onMount } from 'svelte';
-	import type { PanelDefinition } from './types';
-
   import Chart from '../Chart/Chart.svelte';
 
-	export let panels: PanelDefinition[];
+  export let scrollyData: any;
+  export let width: number;
 
 	const isOdyssey: boolean = window.__IS_ODYSSEY_FORMAT__;
 
 	let scalerRef: HTMLElement | undefined;
-  let width: number;
-
-	onMount(() => {
-		setvhAmount();
-	});
-
-	const setvhAmount = () => {
-		const vh = window.innerHeight;
-		scalerRef?.style.setProperty('--vh', `${vh / 100}px`);
-	};
-
-	const windowResizeHandler = () => {
-		setvhAmount();
-	};
+  let zoomOut = false;
 
   // Convert the CM markers into the data expected by the Chart component
-  $: chartData = panels.map(p => ({
+  $: chartData = scrollyData.panels.map(p => ({
     nodes: p.nodes,
     costThousands: p.data.cost,
     labelHeight: p.data.height,
     continue: p.data.continue,
   }));
-</script>
 
-<svelte:window on:resize={windowResizeHandler} />
+  const onZoomOut = () => {
+    window.scrollTo({
+      top: scalerRef?.offsetTop - 50,
+      left: 0,
+      behavior: 'auto'
+    });
+    zoomOut = true;
+  };
+</script>
 
 <svelte:head>
 	{#if isOdyssey}
@@ -58,19 +50,23 @@
 <div
   class="scaler"
   bind:this={scalerRef}
-  bind:clientWidth={width}
 >
   <Chart
     data={chartData}
-    width={Math.min(1200, width)}
+    {width}
+    {zoomOut}
   />
 </div>
 
+<button on:click={onZoomOut}>Zoom out</button>
 
 <style lang="scss">
   .scaler {
 		position: relative;
-    margin-left: 10px;
-    margin-right: 10px;
+    /* margin-left: 10px; */
+    /* margin-right: 10px; */
 	}
+  :global([data-tag="startfallback"]) {
+    display: none;
+  }
 </style>

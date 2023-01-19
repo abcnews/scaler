@@ -9,14 +9,10 @@
     GRID_PADDING,
     FIRST_DIVIDER,
     FIRST_DIVIDER_ROWS,
-    FIRST_DIVIDER_BARS,
-    ROWS_PER_MARKER,
-    TOTAL_VALUE,
     SQUARE_VALUE,
   } from '../../constants';
 
   import Grid from './Grid.svg.svelte';
-  import Divider from './Divider.svelte';
 
   interface Marker {
     costThousands: number;
@@ -27,9 +23,10 @@
 
   const { data, height, width } = getContext('LayerCake');
   export let gridSize: number;
+  export let gridOverflow: number;
+  export let dividerLineOffset: number;
+  export let zoomOut: boolean;
 
-  // How many pixels wide each box in the grid is
-  $: gridOverflow = $width - gridSize * NUM_COLUMNS;
   $: totalRows = $height / gridSize;
 
   // Leave one block of gutter on each side
@@ -74,15 +71,12 @@
       };
     }
 
-    // const nextLabel = item.continue ? progressLabel + newBlock.labelHeight : progress + h;
-
     return {
       blocks: [...blocks, newBlock],
       progress: progress + Math.max(h, newBlock.labelHeight) + gridSize * 2,
       progressLabel: progress + Math.max(h, newBlock.labelHeight) + gridSize * 2,
-      // progressLabel: Math.max(progressLabel + newBlock.labelHeight, progress + h) + gridSize * 2,
     };
-  }, { progress: 0, progressTop: 0, blocks: [] }).blocks;
+  }, { progress: gridSize * 2, progressLabel: gridSize * 2, blocks: [] }).blocks;
 
   const children: Action<Element, Node[]> = (el, chn) => {
     chn.forEach((node) => el.appendChild(node));
@@ -99,19 +93,39 @@
       }
     };
   };
+
+  const getBlockColour = (zOut: boolean, blockTop: number) => {
+    if (zOut) {
+      return blockTop > (dividerRow * gridSize) ? COLOURS.blocksRed : COLOURS.blocks;
+    }
+
+    return blockTop > (dividerRow * gridSize) ? 'url(#pattern-grid-block-red)' : 'url(#pattern-grid-block)';
+  }
 </script>
 
 <Svg>
 
-  <pattern id="pattern-grid-block" x="0" y="0" width={gridSize} height={gridSize} patternUnits="userSpaceOnUse">
-    <rect
-      x={GRID_PADDING / 2}
-      y={GRID_PADDING / 2}
-      width={gridSize - GRID_PADDING}
-      height={gridSize - GRID_PADDING}
-      fill={COLOURS.primary}
-    >
-  </pattern>
+  {#if !zoomOut}
+    <pattern id="pattern-grid-block" x="0" y="0" width={gridSize} height={gridSize} patternUnits="userSpaceOnUse">
+      <rect
+        x={GRID_PADDING / 2}
+        y={GRID_PADDING / 2}
+        width={gridSize - GRID_PADDING}
+        height={gridSize - GRID_PADDING}
+        fill={COLOURS.blocks}
+      >
+    </pattern>
+
+    <pattern id="pattern-grid-block-red" x="0" y="0" width={gridSize} height={gridSize} patternUnits="userSpaceOnUse">
+      <rect
+        x={GRID_PADDING / 2}
+        y={GRID_PADDING / 2}
+        width={gridSize - GRID_PADDING}
+        height={gridSize - GRID_PADDING}
+        fill={COLOURS.blocksRed}
+      >
+    </pattern>
+  {/if}
 
   <g style="transform: translateX({gridOverflow / 2}px);">
 
@@ -122,16 +136,8 @@
       widthBlocks={NUM_COLUMNS}
       offsetBlocks={0}
       {gridSize}
+      useGrid={!zoomOut}
       colour={COLOURS.bg}
-    />
-
-    <!-- Divider background -->
-    <rect
-      x={0}
-      y={(dividerRow) * gridSize}
-      height={FIRST_DIVIDER_ROWS * gridSize}
-      width={NUM_COLUMNS * gridSize}
-      fill={'#f9f9f9'}
     />
 
     <!-- Background grid after divider -->
@@ -139,9 +145,10 @@
       id="bg2"
       heightBlocks={totalRows - dividerRow - FIRST_DIVIDER_ROWS + 1}
       widthBlocks={NUM_COLUMNS}
-      offsetBlocks={dividerRow + FIRST_DIVIDER_ROWS - 1}
+      offsetBlocks={zoomOut ? dividerRow : dividerRow + FIRST_DIVIDER_ROWS - 1}
       {gridSize}
-      colour={COLOURS.bg}
+      useGrid={!zoomOut}
+      colour={COLOURS.bgRed}
     />
 
     <!-- Blocks (don't refactor until we've decided on gutters + alignment) -->
@@ -151,7 +158,7 @@
         y={block.top}
         height={block.height - gridSize}
         width={block.width}
-        fill={'url(#pattern-grid-block'}
+        fill={getBlockColour(zoomOut, block.top)}
       />
       {#if block.finalRowBlocks}
         <rect
@@ -159,7 +166,7 @@
           y={block.top + (block.height - gridSize)}
           height={gridSize}
           width={block.finalRowBlocks * gridSize}
-          fill={'url(#pattern-grid-block'}
+          fill={getBlockColour(zoomOut, block.top)}
         />
       {/if}
       {#if block.finalBlockPixels}
@@ -168,7 +175,7 @@
           y={block.top + (block.height - gridSize)}
           height={block.finalBlockPixels}
           width={gridSize}
-          fill={'url(#pattern-grid-block'}
+          fill={getBlockColour(zoomOut, block.top)}
         />
       {/if}
     {/each}
@@ -200,43 +207,37 @@
 </Svg>
 
 <Html>
-  <div class="labels">
-    {#each blocks as block}
-      <div
-        class="block-label-wrapper"
-        style="
-          position: absolute;
-          top: {block.labelTop}px;
-          height: {block.labelHeight}px;
-          width: {block.width}px;
-          left: {gridSize + gridOverflow / 2}px;
-          margin: 0px;
-          z-index: 10000;
-          --bar-offset: {gridSize * FIRST_DIVIDER_BARS + 40}px;
-        "
-      >
+  {#if !zoomOut}
+    <div class="labels">
+      {#each blocks as block}
         <div
-          class="block-label"
-          use:children={block.item.nodes || []}
-        />
-        <div style="display:none;">{block.item.nodeHash}</div>
-      </div>
-    {/each}
-  </div>
-
-  <Divider
-    offsetValue={FIRST_DIVIDER}
-    heightBlocks={FIRST_DIVIDER_ROWS}
-    numBars={FIRST_DIVIDER_BARS}
-    {gridSize}
-    {gridOverflow}
-    label="$53 billion"
-  />
+          class="block-label-wrapper"
+          style="
+            position: absolute;
+            top: {block.labelTop}px;
+            height: {block.labelHeight}px;
+            width: {block.width}px;
+            left: {gridSize + gridOverflow / 2}px;
+            margin: 0px;
+            z-index: 10000;
+            --bar-offset: {gridSize * dividerLineOffset + 40}px;
+          "
+        >
+          <div
+            class="block-label"
+            use:children={block.item.nodes || []}
+          />
+          <div style="display:none;">{block.item.nodeHash}</div>
+        </div>
+      {/each}
+    </div>
+  {/if}
 </Html>
 
 <style>
   .labels {
     position: relative;
+    z-index: 4;
   }
   .block-label {
     height: 100%;
@@ -250,12 +251,13 @@
 
     padding-left: 35px;
     padding-right: 35px;
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 1.125rem;
+    font-weight: 500;
     text-align: center;
+    color: white;
+    font-family: ABCSerif;
   }
   /* .waypoint { */
-  /*   font-family: ABCSans, Helvetica, sans-serif; */
   /*   font-size: 15px; */
   /*   text-anchor: end; */
   /* } */

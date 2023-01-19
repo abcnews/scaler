@@ -7,9 +7,11 @@ import { whenDOMReady, whenOdysseyLoaded } from '@abcnews/env-utils';
 import { getMountValue, selectMounts } from '@abcnews/mount-utils';
 import type { Mount } from '@abcnews/mount-utils';
 
-import { loadScaler } from './components/Scrollyteller';
+import Scrollyteller, { loadScaler } from './components/Scrollyteller';
 
-import ScrollyWrapper from './components/ScrollyWrapper.svelte';
+import IsolatedGrid from './components/IsolatedGrid.svelte';
+
+let components: any[] = [];
 
 const mountComponents = (name: string, Component: typeof SvelteComponent, props?: any) =>
   selectMounts(name).forEach(
@@ -17,38 +19,53 @@ const mountComponents = (name: string, Component: typeof SvelteComponent, props?
       if (name === 'mark' && !getMountValue(mountEl, name)) {
         return;
       }
+
+      mountEl.classList.add('u-full');
+
       const marker = getMountValue(mountEl, name);
       const el = new Component({
         target: mountEl,
         props: {
           ...(props || {}),
+          ...acto(marker),
           marker,
         },
       })
+      components.push(el);
     }
   );
+
+window.addEventListener("resize", function(event) {
+  const width = Math.min(window.innerWidth - 20, 1000);
+  components.forEach(el => el.$set({ width }));
+})
 
 Promise.all([
   whenOdysseyLoaded,
   proxy('scaler'),
 ]).then(() => {
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  //
+  // if (prefersReducedMotion) {
+  //   console.log('Falling back to non-scrollyteller version for reduced motion.');
+  //
+  //   return;
+  // }
+  
+  const width = Math.min(window.innerWidth - 20, 1000);
 
-  if (prefersReducedMotion) {
-    console.log('Falling back to non-scrollyteller version for reduced motion.');
-
-    return;
-  }
+  mountComponents('isolated', IsolatedGrid, { width });
 
   try {
     const scrollyData = loadScaler('main', 'u-full', 'mark');
     const appMountEl = scrollyData.mountNode;
 
     if (appMountEl) {
-      new ScrollyWrapper({
+      const el = new Scrollyteller({
         target: appMountEl,
-        props: { scrollyData, }
+        props: { scrollyData, width, }
       });
+      components.push(el);
     }
   } catch (e) {
     console.log(e);
