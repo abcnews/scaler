@@ -40,4 +40,5 @@
 <Chart
   {width}
   {data}
+  labels={[]}
 />

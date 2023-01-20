@@ -12,8 +12,12 @@
   const yKey = 'costThousands';
 
   export let width: number;
-  export let zoomOut = false;
+  export let labels: any[];
   export let padding = { top: 0, bottom: 0, left: 0, right: 0 };
+
+  export let zoomOut = false;
+  export let showArrow = false;
+  export let showRedBelowDivider = false;
 
   const numSquares = TOTAL_VALUE / SQUARE_VALUE;
   const numRows = Math.ceil(numSquares / NUM_COLUMNS);
@@ -40,7 +44,7 @@
   }
 
   $: gridOverflow = w - gridSize * NUM_COLUMNS;
-  $: dividerLineOffset = Math.floor((window.innerHeight / 5) / gridSize);
+  $: dividerLineOffset = Math.floor((window.innerHeight / 4) / gridSize);
 
   export let data: any[];
 </script>
@@ -50,10 +54,14 @@
   style="
     width: {w}px;
     height: {$h}px;
+    top: 30px;
+    position: {zoomOut ? 'sticky' : 'static'};
+    transform: {zoomOut ? 'translateX(-50px);' : ''};
+    transition: transform 800ms;
     margin: auto;
   ">
 
-  {#if width && h}
+  {#if gridSize}
     <LayerCake
       {padding}
       x={xKey}
@@ -68,6 +76,7 @@
         {gridOverflow}
         {zoomOut}
         {dividerLineOffset}
+        {labels}
       />
 
       <Html>
@@ -76,9 +85,10 @@
             offsetValue={FIRST_DIVIDER}
             lineOffset={dividerLineOffset}
             length={FIRST_DIVIDER_ROWS}
+            {showRedBelowDivider}
+            {showArrow}
             {gridSize}
             {gridOverflow}
-            label="$53 BILLION"
           />
         {/if}
       </Html>
@@ -87,5 +97,25 @@
   {/if}
 </div>
 
+{#if zoomOut}
+  <div class="panel-container">
+    <p>hello</p>
+    <p>hello</p>
+    <p>hello</p>
+    <p>hello</p>
+    <p>hello</p>
+    <p>hello</p>
+    <p>hello</p>
+    <p>hello</p>
+    <p>hello</p>
+    <p>hello</p>
+    <p>hello</p>
+    <p>hello</p>
+  </div>
+{/if}
+
 <style lang="scss">
+  .panel-container {
+    height: 2000px;
+  }
 </style>

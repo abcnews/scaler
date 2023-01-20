@@ -7,15 +7,15 @@
 </script>
 
 <script lang="ts">
+  import { onMount } from 'svelte';
   import Chart from '../Chart/Chart.svelte';
 
   export let scrollyData: any;
   export let width: number;
 
 	const isOdyssey: boolean = window.__IS_ODYSSEY_FORMAT__;
-
+  let labels: any[] = [];
 	let scalerRef: HTMLElement | undefined;
-  let zoomOut = false;
 
   // Convert the CM markers into the data expected by the Chart component
   $: chartData = scrollyData.panels.map(p => ({
@@ -23,7 +23,65 @@
     costThousands: p.data.cost,
     labelHeight: p.data.height,
     continue: p.data.continue,
+    state: p.data.state,
   }));
+
+
+  let observerOptions: IntersectionObserverInit = {
+    threshold: 0.2,
+    rootMargin: "0px 0px -40% 0px",
+  };
+
+  let zoomOut = false;
+  let showRedBelowDivider = false;
+  let showArrow = false;
+
+  const IntersectionObserverCallback = (entries: IntersectionEntries[]) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const state = entry.target.item.state;
+        // const isAboveBottomOfViewport = entry.boundingClientRect.bottom - entry.boundingClientRect.height > window.innerHeight * 4 / 5;
+
+        const isAboveBottomOfViewport = entry.boundingClientRect.top > 0;
+
+        if (state === 'zoomout') {
+          onZoomOut();
+          zoomOut = true;
+        }
+        if (state === 'colourchange') {
+          showRedBelowDivider = isAboveBottomOfViewport;
+          // When we're transitioning colour, the arrow should always be visible
+          showArrow = true;
+        }
+        if (state === 'showarrow') {
+          showArrow = isAboveBottomOfViewport;
+          // When we're looking at the arrow marker, the colour should always be blue
+          showRedBelowDivider = false;
+        }
+      }
+    });
+  };
+
+  const observer = new IntersectionObserver(IntersectionObserverCallback, observerOptions);
+
+
+  // let zoomOutMarker;
+  // let colourChangeMarker;
+  // let showArrowMarker;
+
+  onMount(() => {
+    // labels.forEach((label) => {
+    //   switch (label.item.state) {
+    //     case 'zoomout':
+    //       zoomOutMarker = label;
+    //     case 'colourchange':
+    //       colourChangeMarker = label;
+    //     case 'showarrow':
+    //       showArrowMarker = label;
+    //   }
+    // });
+    labels.forEach((label) => observer.observe(label));
+  });
 
   const onZoomOut = () => {
     window.scrollTo({
@@ -31,7 +89,7 @@
       left: 0,
       behavior: 'auto'
     });
-    zoomOut = true;
+    // zoomOut = true;
   };
 </script>
 
@@ -54,7 +112,10 @@
   <Chart
     data={chartData}
     {width}
+    {labels}
+    {showArrow}
     {zoomOut}
+    {showRedBelowDivider}
   />
 </div>
 
@@ -63,8 +124,6 @@
 <style lang="scss">
   .scaler {
 		position: relative;
-    /* margin-left: 10px; */
-    /* margin-right: 10px; */
 	}
   :global([data-tag="startfallback"]) {
     display: none;
