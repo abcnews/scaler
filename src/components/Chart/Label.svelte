@@ -1,15 +1,21 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { tweened } from 'svelte/motion';
   import type { Action } from 'svelte/action';
 
   export let block: any;
 
   export let gridSize: number;
   export let gridOverflow: number;
-  export let dividerLineOffset: number;
+  export let offsetBlocks: number;
   export let labels: any[];
 
   let labelRef: any;
+
+  const barOffset = tweened(0, {
+    duration: 400
+  });
+  $: barOffset.set(gridSize * (offsetBlocks + 1.5));
 
   onMount(() => {
     labelRef.item = block.item;
@@ -44,7 +50,8 @@
     left: {gridSize + gridOverflow / 2}px;
     margin: 0px;
     z-index: 10000;
-    --bar-offset: {gridSize * (dividerLineOffset + Math.ceil(70 / gridSize)) + 40}px;
+
+    --bar-offset: {$barOffset}px;
   "
 >
   <div
@@ -54,7 +61,7 @@
   <div style="display:none;">{block.item.nodeHash}</div>
 </div>
 
-<style>
+<style lang="scss">
   .block-label {
     height: 100%;
     position: relative;
@@ -67,10 +74,15 @@
 
     padding-left: 35px;
     padding-right: 35px;
-    font-size: 1.125rem;
+    font-size: 1.25rem;
     font-weight: 500;
     text-align: center;
     color: white;
     font-family: ABCSerif;
+
+    :global(a) {
+      color: #efe6b9 !important;
+      text-decoration: underline;
+    }
   }
 </style>

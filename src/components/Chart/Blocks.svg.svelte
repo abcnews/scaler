@@ -6,8 +6,8 @@
     NUM_COLUMNS,
     COLOURS,
     GRID_PADDING,
-    FIRST_DIVIDER,
-    FIRST_DIVIDER_ROWS,
+    DIVIDER_VALUE,
+    DIVIDER_ROWS,
     SQUARE_VALUE,
   } from '../../constants';
 
@@ -25,15 +25,18 @@
   export let gridSize: number;
   export let gridOverflow: number;
   export let dividerLineOffset: number;
-  export let zoomOut: boolean;
   export let labels: any[];
+
+  export let zoomOut: boolean;
+  export let isDocked: boolean;
+  export let showRedBelowDivider: boolean;
 
   $: totalRows = $height / gridSize;
 
   // Leave one block of gutter on each side
   $: numBlocksPerRow = Math.floor($width / gridSize) - 2;
 
-  $: dividerRow = Math.round(FIRST_DIVIDER / (NUM_COLUMNS * SQUARE_VALUE));
+  $: dividerRow = Math.round(DIVIDER_VALUE / (NUM_COLUMNS * SQUARE_VALUE));
 
   $: blocks = $data.reduce(({ progress, progressLabel, blocks }, item: Marker) => {
     const total = item.costThousands || 0;
@@ -128,9 +131,9 @@
     <!-- Background grid after divider -->
     <Grid
       id="bg2"
-      heightBlocks={totalRows - dividerRow - FIRST_DIVIDER_ROWS + 1}
+      heightBlocks={totalRows - dividerRow - DIVIDER_ROWS + 1}
       widthBlocks={NUM_COLUMNS}
-      offsetBlocks={zoomOut ? dividerRow : dividerRow + FIRST_DIVIDER_ROWS - 1}
+      offsetBlocks={zoomOut ? dividerRow : dividerRow + DIVIDER_ROWS - 1}
       {gridSize}
       useGrid={!zoomOut}
       colour={COLOURS.bgRed}
@@ -165,29 +168,6 @@
       {/if}
     {/each}
 
-    <!-- Waypoint markers for how much $$$ has been scrolled past -->
-    <!-- {#if $height} -->
-    <!--   {#each Array(Math.floor($height / (gridSize * ROWS_PER_MARKER))) as _, i} -->
-    <!--  -->
-    <!--     {#if (i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER) >= FIRST_DIVIDER &#38;&#38; (i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER) <= TOTAL_VALUE} -->
-    <!--       <rect -->
-    <!--         x={-30} -->
-    <!--         y={i * gridSize * ROWS_PER_MARKER + FIRST_DIVIDER_ROWS * gridSize} -->
-    <!--         width={60} -->
-    <!--         height={2} -->
-    <!--         fill="black" -->
-    <!--       /> -->
-    <!--       <text -->
-    <!--         class="waypoint" -->
-    <!--         x={-5} -->
-    <!--         y={i * gridSize * ROWS_PER_MARKER + FIRST_DIVIDER_ROWS * gridSize - 5} -->
-    <!--       > -->
-    <!--         ${i * SQUARE_VALUE * NUM_COLUMNS * ROWS_PER_MARKER / 10 / 100} billion -->
-    <!--       </text> -->
-    <!--     {/if} -->
-    <!--   {/each} -->
-    <!-- {/if} -->
-
   </g>
 </Svg>
 
@@ -199,7 +179,7 @@
           {block}
           {gridSize}
           {gridOverflow}
-          {dividerLineOffset}
+          offsetBlocks={(isDocked ? dividerLineOffset : 0) + (showRedBelowDivider ? Math.ceil(90 / gridSize) : 0)}
           {labels}
         />
       {/each}

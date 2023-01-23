@@ -14,7 +14,6 @@
   export let heightBlocks: number;
 </script>
 
-
 {#if useGrid}
   <pattern id="pattern-grid-{id}" x="0" y="0" width={gridSize} height={gridSize} patternUnits="userSpaceOnUse">
     <rect

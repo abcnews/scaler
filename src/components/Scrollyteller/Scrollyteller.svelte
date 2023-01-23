@@ -33,6 +33,7 @@
   };
 
   let zoomOut = false;
+  let isDocked = false;
   let showRedBelowDivider = false;
   let showArrow = false;
 
@@ -48,15 +49,20 @@
           onZoomOut();
           zoomOut = true;
         }
+        if (state === 'docked') {
+          isDocked = true;
+        }
         if (state === 'colourchange') {
           showRedBelowDivider = isAboveBottomOfViewport;
           // When we're transitioning colour, the arrow should always be visible
           showArrow = true;
+          isDocked = true;
         }
         if (state === 'showarrow') {
           showArrow = isAboveBottomOfViewport;
           // When we're looking at the arrow marker, the colour should always be blue
           showRedBelowDivider = false;
+          isDocked = true;
         }
       }
     });
@@ -64,32 +70,16 @@
 
   const observer = new IntersectionObserver(IntersectionObserverCallback, observerOptions);
 
-
-  // let zoomOutMarker;
-  // let colourChangeMarker;
-  // let showArrowMarker;
-
   onMount(() => {
-    // labels.forEach((label) => {
-    //   switch (label.item.state) {
-    //     case 'zoomout':
-    //       zoomOutMarker = label;
-    //     case 'colourchange':
-    //       colourChangeMarker = label;
-    //     case 'showarrow':
-    //       showArrowMarker = label;
-    //   }
-    // });
     labels.forEach((label) => observer.observe(label));
   });
 
   const onZoomOut = () => {
     window.scrollTo({
-      top: scalerRef?.offsetTop - 50,
+      top: (scalerRef?.offsetTop || 0) - 50,
       left: 0,
       behavior: 'auto'
     });
-    // zoomOut = true;
   };
 </script>
 
@@ -116,10 +106,9 @@
     {showArrow}
     {zoomOut}
     {showRedBelowDivider}
+    {isDocked}
   />
 </div>
-
-<button on:click={onZoomOut}>Zoom out</button>
 
 <style lang="scss">
   .scaler {

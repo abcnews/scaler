@@ -3,7 +3,7 @@
   import { tweened } from 'svelte/motion';
 	import { cubicOut } from 'svelte/easing';
 
-  import { TOTAL_VALUE, NUM_COLUMNS, SQUARE_VALUE, FIRST_DIVIDER, FIRST_DIVIDER_ROWS } from '../../constants';
+  import { TOTAL_VALUE, NUM_COLUMNS, SQUARE_VALUE, DIVIDER_VALUE, DIVIDER_ROWS } from '../../constants';
 
   import Blocks from './Blocks.svg.svelte';
   import Divider from './Divider.svelte';
@@ -16,12 +16,14 @@
   export let padding = { top: 0, bottom: 0, left: 0, right: 0 };
 
   export let zoomOut = false;
+  export let isDocked = false;
   export let showArrow = false;
   export let showRedBelowDivider = false;
 
   const numSquares = TOTAL_VALUE / SQUARE_VALUE;
   const numRows = Math.ceil(numSquares / NUM_COLUMNS);
 
+  // The shrinking height gives the zoom-out effect, as the width & gridSize shrink with it
   const h = tweened(20 * numRows, {
 		duration: 1200,
 		easing: cubicOut
@@ -39,7 +41,7 @@
     } else {
       w = width;
       gridSize = Math.floor(w / NUM_COLUMNS)
-      h.set((numRows + FIRST_DIVIDER_ROWS) * gridSize);
+      h.set((numRows + DIVIDER_ROWS) * gridSize);
     }
   }
 
@@ -56,7 +58,7 @@
     height: {$h}px;
     top: 30px;
     position: {zoomOut ? 'sticky' : 'static'};
-    transform: {zoomOut ? 'translateX(-50px);' : ''};
+    transform: {zoomOut ? 'translateX(-50px)' : ''};
     transition: transform 800ms;
     margin: auto;
   ">
@@ -74,17 +76,19 @@
       <Blocks
         {gridSize}
         {gridOverflow}
-        {zoomOut}
         {dividerLineOffset}
         {labels}
+        {zoomOut}
+        {isDocked}
+        {showRedBelowDivider}
       />
 
       <Html>
         {#if !zoomOut}
           <Divider
-            offsetValue={FIRST_DIVIDER}
+            offsetValue={DIVIDER_VALUE}
             lineOffset={dividerLineOffset}
-            length={FIRST_DIVIDER_ROWS}
+            length={DIVIDER_ROWS}
             {showRedBelowDivider}
             {showArrow}
             {gridSize}
@@ -99,23 +103,11 @@
 
 {#if zoomOut}
   <div class="panel-container">
-    <p>hello</p>
-    <p>hello</p>
-    <p>hello</p>
-    <p>hello</p>
-    <p>hello</p>
-    <p>hello</p>
-    <p>hello</p>
-    <p>hello</p>
-    <p>hello</p>
-    <p>hello</p>
-    <p>hello</p>
-    <p>hello</p>
   </div>
 {/if}
 
 <style lang="scss">
   .panel-container {
-    height: 2000px;
+    height: 110vh;
   }
 </style>

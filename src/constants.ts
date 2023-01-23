@@ -11,14 +11,10 @@ export const SQUARE_VALUE = 5; // in millions
 export const NUM_COLUMNS = 20;
 export const GRID_PADDING = 0.5;
 
-// Dollar markers on the left-hand side
-export const FIRST_MARKER_VALUE = 2_000; // in millions
-export const ROWS_PER_MARKER = 20; // in millions
-
 // Value to dock at
-export const FIRST_DIVIDER = 53_000; // in millions
+export const DIVIDER_VALUE = 53_000; // in millions
 // Length of docked section
-export const FIRST_DIVIDER_ROWS = 150;
+export const DIVIDER_ROWS = 150;
 
 export const COLOURS = {
   //

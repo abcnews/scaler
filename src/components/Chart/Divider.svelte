@@ -1,5 +1,17 @@
 <script lang="ts">
   import { fly } from 'svelte/transition';
+  import { tweened } from 'svelte/motion';
+  import { interpolateLab } from 'd3-interpolate';
+
+  const bgColours = [
+    COLOURS.bg,
+    COLOURS.bgRed
+  ];
+
+  const colour = tweened(bgColours[0], {
+      duration: 300,
+      interpolate: interpolateLab
+  });
 
   import {
     NUM_COLUMNS,
@@ -25,6 +37,7 @@
   const MIDDLE_GRID_HEIGHT = 70;
 
   $: middleGridLength = Math.ceil(MIDDLE_GRID_HEIGHT / gridSize);
+  $: showRedBelowDivider ? colour.set(COLOURS.bgRed) : colour.set(COLOURS.bg);
 </script>
 
 <div
@@ -56,7 +69,7 @@
       <div
         in:fly="{{ y: 50, duration: 800 }}"
         class="arrow"
-        style="top: {lineOffset * gridSize - 60}px;"
+        style="top: {lineOffset * gridSize - 70}px;"
       >
         <svg width="19" height="26" viewBox="0 0 19 26" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M10 3V26" stroke="white" stroke-width="3"/>
@@ -67,7 +80,7 @@
     
     <div
       class="label"
-      style="top: {lineOffset * gridSize - 30}px;"
+      style="top: {lineOffset * gridSize - 40}px;"
     >
       $53 BILLION
     </div>
@@ -92,7 +105,7 @@
             offsetBlocks={0}
             heightBlocks={middleGridLength}
             widthBlocks={NUM_COLUMNS}
-            colour={COLOURS.bgRed}
+            colour={$colour}
             useGrid={true}
             {gridSize}
           />
@@ -101,15 +114,19 @@
 
       <div
         class="label"
-        style="top: {lineOffset * gridSize + 2}px;"
+        style="
+          top: {lineOffset * gridSize + 8}px;
+          font-size: 28px;
+        "
+        in:fly="{{ y: -30, duration: 800 }}"
       >
         $189 BILLION
       </div>
 
       <div
         class="arrow"
-        style="top: {lineOffset * gridSize + 34}px;"
-        in:fly="{{ y: -50, duration: 800 }}"
+        style="top: {lineOffset * gridSize + 48}px;"
+        in:fly="{{ y: -30, duration: 800 }}"
       >
         <svg width="19" height="26" viewBox="0 0 19 26" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M10 0V23" stroke="white" stroke-width="3"/>
@@ -147,7 +164,7 @@
           offsetBlocks={lineOffset}
           heightBlocks={length - lineOffset}
           widthBlocks={NUM_COLUMNS}
-          colour={showRedBelowDivider ? COLOURS.bgRed : COLOURS.bg}
+          colour={$colour}
           useGrid={true}
           {gridSize}
         />
