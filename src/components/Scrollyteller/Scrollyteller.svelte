@@ -26,7 +26,6 @@
     state: p.data.state,
   }));
 
-
   let observerOptions: IntersectionObserverInit = {
     threshold: 0.2,
     rootMargin: "0px 0px -40% 0px",

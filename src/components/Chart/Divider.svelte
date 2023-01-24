@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { fly } from 'svelte/transition';
+  import { fly, fade } from 'svelte/transition';
   import { tweened } from 'svelte/motion';
   import { interpolateLab } from 'd3-interpolate';
 
@@ -98,7 +98,14 @@
     />
 
     {#if showRedBelowDivider}
-      <svg style="width:100%;height:{middleGridLength * gridSize}px;background:white;transform: translateY(-6px);">
+      <svg
+        in:fade={{ duration: 400 }}
+        style="
+          width:100%;
+          height:{middleGridLength * gridSize}px;
+          background:white;
+          transform: translateY(-6px);
+        ">
         <g style="transform: translateX({gridOverflow / 2}px);">
           <Grid
             id="bg-floating-middle"

@@ -19,6 +19,7 @@
     label: string;
     labelHeight: number;
     continue?: boolean;
+    state: string;
   }
 
   const { data, height, width } = getContext('LayerCake');
@@ -139,34 +140,36 @@
       colour={COLOURS.bgRed}
     />
 
-    <!-- Blocks (don't refactor until we've decided on gutters + alignment) -->
-    {#each blocks as block}
-      <rect
-        x={gridSize}
-        y={block.top}
-        height={block.height - gridSize}
-        width={block.width}
-        fill={getBlockColour(zoomOut, block.top)}
-      />
-      {#if block.finalRowBlocks}
+    {#if !zoomOut}
+      <!-- Blocks (don't refactor until we've decided on gutters + alignment) -->
+      {#each blocks as block}
         <rect
           x={gridSize}
-          y={block.top + (block.height - gridSize)}
-          height={gridSize}
-          width={block.finalRowBlocks * gridSize}
+          y={block.top}
+          height={block.height - gridSize}
+          width={block.width}
           fill={getBlockColour(zoomOut, block.top)}
         />
-      {/if}
-      {#if block.finalBlockPixels}
-        <rect
-          x={(block.finalRowBlocks + 1) * gridSize}
-          y={block.top + (block.height - gridSize)}
-          height={block.finalBlockPixels}
-          width={gridSize}
-          fill={getBlockColour(zoomOut, block.top)}
-        />
-      {/if}
-    {/each}
+        {#if block.finalRowBlocks}
+          <rect
+            x={gridSize}
+            y={block.top + (block.height - gridSize)}
+            height={gridSize}
+            width={block.finalRowBlocks * gridSize}
+            fill={getBlockColour(zoomOut, block.top)}
+          />
+        {/if}
+        {#if block.finalBlockPixels}
+          <rect
+            x={(block.finalRowBlocks + 1) * gridSize}
+            y={block.top + (block.height - gridSize)}
+            height={block.finalBlockPixels}
+            width={gridSize}
+            fill={getBlockColour(zoomOut, block.top)}
+          />
+        {/if}
+      {/each}
+    {/if}
 
   </g>
 </Svg>
@@ -175,11 +178,14 @@
   {#if !zoomOut}
     <div class="labels">
       {#each blocks as block}
+        {@const offsetDocked = isDocked && block.item.state ? dividerLineOffset : 0}
+        {@const offsetDivider = (showRedBelowDivider && block.item.state !== 'showarrow' && block.item.state) ? Math.ceil(55 / gridSize) : 0}
+
         <Label
           {block}
           {gridSize}
           {gridOverflow}
-          offsetBlocks={(isDocked ? dividerLineOffset : 0) + (showRedBelowDivider ? Math.ceil(90 / gridSize) : 0)}
+          offsetBlocks={offsetDocked + offsetDivider}
           {labels}
         />
       {/each}
