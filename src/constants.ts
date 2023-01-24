@@ -1,6 +1,4 @@
-import { Customisation } from './types';
-
-export const defaultCustomisation: Customisation = {
+export const defaultCustomisation = {
   text: '',
   intro: '',
 };

@@ -1,1 +1,1 @@
-window.location = String(window.location).replace('/latest/', '/rows-20/')
+window.location = String(window.location).replace('/latest/', '/main/')

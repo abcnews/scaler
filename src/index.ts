@@ -7,8 +7,9 @@ import { whenDOMReady, whenOdysseyLoaded } from '@abcnews/env-utils';
 import { getMountValue, selectMounts } from '@abcnews/mount-utils';
 import type { Mount } from '@abcnews/mount-utils';
 
-import Scrollyteller, { loadScaler } from './components/Scrollyteller';
+import { loadScaler } from './utils';
 
+import Scaler from './components/Scaler.svelte';
 import IsolatedGrid from './components/IsolatedGrid.svelte';
 
 let components: any[] = [];
@@ -61,7 +62,7 @@ Promise.all([
     const appMountEl = scrollyData.mountNode;
 
     if (appMountEl) {
-      const el = new Scrollyteller({
+      const el = new Scaler({
         target: appMountEl,
         props: { scrollyData, width, }
       });

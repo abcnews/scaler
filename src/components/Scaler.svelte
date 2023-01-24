@@ -8,7 +8,7 @@
 
 <script lang="ts">
   import { onMount } from 'svelte';
-  import Chart from '../Chart/Chart.svelte';
+  import Chart from './Chart/Chart.svelte';
 
   export let scrollyData: any;
   export let width: number;
@@ -40,13 +40,15 @@
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
         const state = entry.target.item.state;
-        // const isAboveBottomOfViewport = entry.boundingClientRect.bottom - entry.boundingClientRect.height > window.innerHeight * 4 / 5;
-
         const isAboveBottomOfViewport = entry.boundingClientRect.top > 0;
 
-        if (state === 'zoomout') {
-          onZoomOut();
-          zoomOut = true;
+        if (state === 'zoomout' && !zoomOut) {
+          console.log('here');
+          setTimeout(() => {
+            console.log('here2');
+            onZoomOut();
+            zoomOut = true;
+          }, 2500);
         }
         if (state === 'docked') {
           isDocked = true;

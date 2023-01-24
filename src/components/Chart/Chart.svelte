@@ -7,6 +7,7 @@
 
   import Blocks from './Blocks.svg.svelte';
   import Divider from './Divider.svelte';
+  import ZoomedOutLabels from './ZoomedOutLabels.svelte';
 
   const xKey = 'widthPercent';
   const yKey = 'costThousands';
@@ -95,15 +96,19 @@
             {gridOverflow}
           />
         {/if}
+
+        {#if zoomOut}
+          <ZoomedOutLabels {gridSize} />
+        {/if}
       </Html>
 
     </LayerCake>
   {/if}
 </div>
 
+<!-- wrapper to make it take a second to scroll out of the viz when zoomed out -->
 {#if zoomOut}
-  <div class="panel-container">
-  </div>
+  <div class="panel-container" />
 {/if}
 
 <style lang="scss">
