@@ -8,7 +8,9 @@
 
 <script lang="ts">
   import { onMount } from 'svelte';
+
   import Chart from './Chart/Chart.svelte';
+  import Button from './Button.svelte';
 
   export let scrollyData: any;
   export let width: number;
@@ -43,9 +45,7 @@
         const isAboveBottomOfViewport = entry.boundingClientRect.top > 0;
 
         if (state === 'zoomout' && !zoomOut) {
-          console.log('here');
           setTimeout(() => {
-            console.log('here2');
             onZoomOut();
             zoomOut = true;
           }, 2500);
@@ -77,10 +77,13 @@
 
   const onZoomOut = () => {
     window.scrollTo({
-      top: (scalerRef?.offsetTop || 0) - 50,
+      top: (scalerRef?.offsetTop || 0) + 50,
       left: 0,
       behavior: 'auto'
     });
+  };
+  const onZoomIn = () => {
+    zoomOut = false;
   };
 </script>
 
@@ -95,6 +98,16 @@
 		</style>
 	{/if}
 </svelte:head>
+
+
+{#if zoomOut}
+  <div class="button-wrapper">
+    <Button
+      onClick={onZoomIn}
+      label="RESET VISUALISATION"
+    />
+  </div>
+{/if}
 
 <div
   class="scaler"
@@ -115,6 +128,11 @@
   .scaler {
 		position: relative;
 	}
+  .button-wrapper {
+    margin: 30px;
+    margin-bottom: 80px;
+    text-align: center;
+  }
   :global([data-tag="startfallback"]) {
     display: none;
   }

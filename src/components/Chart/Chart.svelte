@@ -113,6 +113,6 @@
 
 <style lang="scss">
   .panel-container {
-    height: 110vh;
+    height: 35vh;
   }
 </style>
