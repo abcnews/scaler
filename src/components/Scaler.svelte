@@ -68,34 +68,44 @@
 
   const observer = new IntersectionObserver(IntersectionObserverCallback, observerOptions);
 
-  let zoomOutTriggerOffset;
   onMount(() => {
     labels.forEach((label) => observer.observe(label));
 
+    let zoomOutTriggerOffset;
     // Backup mechanism to trigger zoom out if the reader scrolls too far
     setTimeout(() => {
       zoomOutTriggerOffset = labels.find(l => l.item.state === 'zoomout')?.offsetTop;
     }, 50);
     addEventListener("scroll", () => {
-      if (zoomOutTriggerOffset && zoomOutTriggerOffset < (window.scrollY - window.innerHeight * 2)) {
-        // console.log({ offset: zoomOutTriggerOffset, scroll: window.scrollY - window.innerHeight * 2 });
-        setTimeout(onZoomOut, 200);
+      if (zoomOutTriggerOffset && zoomOutTriggerOffset < (window.scrollY - window.innerHeight * 2.5)) {
+        onZoomOut();
       }
     });
   });
 
   const onZoomOut = () => {
     if (!zoomOut) {
+      // Just a bit of harmless scroll-jacking while we zoom out
       window.scrollTo({
         top: (scalerRef?.offsetTop || 0) + 50,
         left: 0,
         behavior: 'auto'
       });
       zoomOut = true;
+      setTimeout(() =>
+        window.scrollTo({
+          top: (scalerRef?.offsetTop || 0) + 50,
+          left: 0,
+          behavior: 'auto'
+        })
+      , 300);
     }
   };
   const onZoomIn = () => {
     zoomOut = false;
+    isDocked = false;
+    showRedBelowDivider = false;
+    showArrow = false;
   };
 </script>
 
