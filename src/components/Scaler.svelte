@@ -45,7 +45,7 @@
         const isAboveBottomOfViewport = entry.boundingClientRect.top > 0;
 
         if (state === 'zoomout' && !zoomOut) {
-          setTimeout(onZoomOut, 1500);
+          setTimeout(onZoomOut, 2000);
         }
         if (state === 'docked') {
           isDocked = true;
