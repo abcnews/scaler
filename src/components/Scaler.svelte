@@ -45,10 +45,7 @@
         const isAboveBottomOfViewport = entry.boundingClientRect.top > 0;
 
         if (state === 'zoomout' && !zoomOut) {
-          setTimeout(() => {
-            onZoomOut();
-            zoomOut = true;
-          }, 2500);
+          setTimeout(onZoomOut, 1500);
         }
         if (state === 'docked') {
           isDocked = true;
@@ -71,16 +68,31 @@
 
   const observer = new IntersectionObserver(IntersectionObserverCallback, observerOptions);
 
+  let zoomOutTriggerOffset;
   onMount(() => {
     labels.forEach((label) => observer.observe(label));
+
+    // Backup mechanism to trigger zoom out if the reader scrolls too far
+    setTimeout(() => {
+      zoomOutTriggerOffset = labels.find(l => l.item.state === 'zoomout')?.offsetTop;
+    }, 50);
+    addEventListener("scroll", () => {
+      if (zoomOutTriggerOffset && zoomOutTriggerOffset < (window.scrollY - window.innerHeight * 2)) {
+        // console.log({ offset: zoomOutTriggerOffset, scroll: window.scrollY - window.innerHeight * 2 });
+        setTimeout(onZoomOut, 200);
+      }
+    });
   });
 
   const onZoomOut = () => {
-    window.scrollTo({
-      top: (scalerRef?.offsetTop || 0) + 50,
-      left: 0,
-      behavior: 'auto'
-    });
+    if (!zoomOut) {
+      window.scrollTo({
+        top: (scalerRef?.offsetTop || 0) + 50,
+        left: 0,
+        behavior: 'auto'
+      });
+      zoomOut = true;
+    }
   };
   const onZoomIn = () => {
     zoomOut = false;
