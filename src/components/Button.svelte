@@ -24,9 +24,8 @@
     font-family: 'ABCSans';
     color: black;
     display: inline-block;
-    background: rgba(217, 217, 217, 1);
-    font-size: 0.875rem;
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: 700;
     height: 48px;
     margin: 0;
     text-align: center;
@@ -34,9 +33,10 @@
     cursor: pointer;
     border: 1px solid;
     border-color: rgba(0, 0, 0, 0.6);
-    transition: var(--dls-link-transition);
+    background: transparent;
     touch-action: manipulation;
 
-    border-radius: 0;
+    border-radius: 4px;
+    padding: 12px;
   }
 </style>

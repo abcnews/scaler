@@ -126,7 +126,7 @@
   <div class="button-wrapper">
     <Button
       onClick={onZoomIn}
-      label="RESET VISUALISATION"
+      label="START AGAIN"
     />
   </div>
 {/if}

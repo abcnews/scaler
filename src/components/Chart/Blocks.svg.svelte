@@ -143,6 +143,12 @@
     {#if !zoomOut}
       <!-- Blocks (don't refactor until we've decided on gutters + alignment) -->
       {#each blocks as block}
+
+        <!-- BoM rebrand cost is so small we want to push it down and label it -->
+        {@const isBom = block.item.costThousands && block.item.costThousands < 500}
+        {@const bomCustomOffsetX = isBom ? Math.floor(80 / gridSize) * gridSize * 0 : 0}
+        {@const bomCustomOffsetY = isBom ? gridSize * 20 : 0}
+
         <rect
           x={gridSize}
           y={block.top}
@@ -161,12 +167,51 @@
         {/if}
         {#if block.finalBlockPixels}
           <rect
-            x={(block.finalRowBlocks + 1) * gridSize}
-            y={block.top + (block.height - gridSize)}
+            x={(block.finalRowBlocks + 1) * gridSize + bomCustomOffsetX}
+            y={block.top + (block.height - gridSize) + bomCustomOffsetY}
             height={block.finalBlockPixels}
             width={gridSize}
             fill={getBlockColour(zoomOut, block.top)}
           />
+
+          {#if isBom}
+            <g
+              transform={`translate(${(block.finalRowBlocks + 1) * gridSize * 1.5}, ${block.top + (block.height - gridSize) + bomCustomOffsetY - 15})`}
+            >
+              <text
+                class="bom-label"
+                x={0}
+                y={-45}
+              >
+                Hey!
+              </text>
+              <text
+                class="bom-label"
+                x={0}
+                y={-27}
+              >
+                Over
+              </text>
+              <text
+                class="bom-label"
+                x={0}
+                y={-10}
+              >
+                here!
+              </text>
+
+            
+              <g
+                transform={`translate(${-5}, ${0})`}
+              >
+                <path
+                  d="M3.64645 10.3536C3.84171 10.5488 4.15829 10.5488 4.35355 10.3536L7.53553 7.17157C7.7308 6.97631 7.7308 6.65973 7.53553 6.46447C7.34027 6.2692 7.02369 6.2692 6.82843 6.46447L4 9.29289L1.17157 6.46447C0.976311 6.2692 0.659729 6.2692 0.464466 6.46447C0.269204 6.65973 0.269204 6.97631 0.464466 7.17157L3.64645 10.3536ZM3.5 2.18557e-08L3.5 10L4.5 10L4.5 -2.18557e-08L3.5 2.18557e-08Z"
+                  fill="white"
+                  stroke="white"
+                />
+              </g>
+            </g>
+          {/if}
         {/if}
       {/each}
     {/if}
@@ -197,5 +242,14 @@
   .labels {
     position: relative;
     z-index: 4;
+  }
+
+  .bom-label {
+    font-family: "ABCSans", Helvetica, sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 12px;
+    text-anchor: middle;
+    fill: white;
   }
 </style>
