@@ -17,7 +17,6 @@
   export let padding = { top: 0, bottom: 0, left: 0, right: 0 };
 
   export let zoomOut = false;
-  export let isDocked = false;
   export let showArrow = false;
   export let showRedBelowDivider = false;
 
@@ -80,7 +79,6 @@
         {dividerLineOffset}
         {labels}
         {zoomOut}
-        {isDocked}
         {showRedBelowDivider}
       />
 

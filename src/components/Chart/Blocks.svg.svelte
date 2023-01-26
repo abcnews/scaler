@@ -29,7 +29,6 @@
   export let labels: any[];
 
   export let zoomOut: boolean;
-  export let isDocked: boolean;
   export let showRedBelowDivider: boolean;
 
   $: totalRows = $height / gridSize;
@@ -223,8 +222,9 @@
   {#if !zoomOut}
     <div class="labels">
       {#each blocks as block}
-        {@const offsetDocked = isDocked && block.item.state ? dividerLineOffset : 0}
-        {@const offsetDivider = (showRedBelowDivider && block.item.state !== 'showarrow' && block.item.state) ? Math.ceil(55 / gridSize) : 0}
+        {@const state = block.item.state}
+        {@const offsetDocked = (state === 'docked' || state === 'showarrow' || state === 'colourchange') ? dividerLineOffset : 0}
+        {@const offsetDivider = (state === 'colourchange') ? Math.ceil(55 / gridSize) : 0}
 
         <Label
           {block}

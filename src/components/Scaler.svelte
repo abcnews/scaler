@@ -34,7 +34,6 @@
   };
 
   let zoomOut = false;
-  let isDocked = false;
   let showRedBelowDivider = false;
   let showArrow = false;
 
@@ -47,20 +46,15 @@
         if (state === 'zoomout' && !zoomOut) {
           setTimeout(onZoomOut, 2000);
         }
-        if (state === 'docked') {
-          isDocked = true;
-        }
         if (state === 'colourchange') {
           showRedBelowDivider = isAboveBottomOfViewport;
           // When we're transitioning colour, the arrow should always be visible
           showArrow = true;
-          isDocked = true;
         }
         if (state === 'showarrow') {
           showArrow = isAboveBottomOfViewport;
           // When we're looking at the arrow marker, the colour should always be blue
           showRedBelowDivider = false;
-          isDocked = true;
         }
       }
     });
@@ -103,7 +97,6 @@
   };
   const onZoomIn = () => {
     zoomOut = false;
-    isDocked = false;
     showRedBelowDivider = false;
     showArrow = false;
   };
@@ -142,7 +135,6 @@
     {showArrow}
     {zoomOut}
     {showRedBelowDivider}
-    {isDocked}
   />
 </div>
 
