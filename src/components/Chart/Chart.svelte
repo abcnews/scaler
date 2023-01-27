@@ -79,7 +79,6 @@
         {dividerLineOffset}
         {labels}
         {zoomOut}
-        {showRedBelowDivider}
       />
 
       <Html>

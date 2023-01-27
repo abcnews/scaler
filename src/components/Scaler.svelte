@@ -46,15 +46,15 @@
         if (state === 'zoomout' && !zoomOut) {
           setTimeout(onZoomOut, 2000);
         }
-        if (state === 'colourchange') {
-          showRedBelowDivider = isAboveBottomOfViewport;
-          // When we're transitioning colour, the arrow should always be visible
-          showArrow = true;
-        }
+        // if (state === 'colourchange') {
+        //   showRedBelowDivider = isAboveBottomOfViewport;
+        //   // When we're transitioning colour, the arrow should always be visible
+        //   showArrow = true;
+        // }
         if (state === 'showarrow') {
           showArrow = isAboveBottomOfViewport;
           // When we're looking at the arrow marker, the colour should always be blue
-          showRedBelowDivider = false;
+          // showRedBelowDivider = false;
         }
       }
     });
@@ -62,17 +62,28 @@
 
   const observer = new IntersectionObserver(IntersectionObserverCallback, observerOptions);
 
+  let zoomOutTriggerOffset: number;
+  let colourChangeTriggerOffset: number;
   onMount(() => {
     labels.forEach((label) => observer.observe(label));
 
-    let zoomOutTriggerOffset;
     // Backup mechanism to trigger zoom out if the reader scrolls too far
     setTimeout(() => {
       zoomOutTriggerOffset = labels.find(l => l.item.state === 'zoomout')?.offsetTop;
+      colourChangeTriggerOffset = labels.find(l => l.item.state === 'colourchange')?.offsetTop;
     }, 50);
     addEventListener("scroll", () => {
-      if (zoomOutTriggerOffset && zoomOutTriggerOffset < (window.scrollY - window.innerHeight * 2.5)) {
+      const offset = window.scrollY - window.innerHeight * 2.5;
+
+      if (zoomOutTriggerOffset && zoomOutTriggerOffset < offset) {
         onZoomOut();
+      }
+      if (colourChangeTriggerOffset && colourChangeTriggerOffset < offset) {
+        showRedBelowDivider = true;
+        // When we're transitioning colour, the arrow should already be visible
+        showArrow = true;
+      } else {
+        showRedBelowDivider = false;
       }
     });
   });
@@ -86,13 +97,14 @@
         behavior: 'auto'
       });
       zoomOut = true;
-      setTimeout(() =>
+      setTimeout(() => {
         window.scrollTo({
           top: (scalerRef?.offsetTop || 0) + 50,
           left: 0,
           behavior: 'auto'
         })
-      , 300);
+        zoomOutTriggerOffset = labels.find(l => l.item.state === 'zoomout')?.offsetTop;
+      }, 300);
     }
   };
   const onZoomIn = () => {

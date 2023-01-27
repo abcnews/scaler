@@ -37,6 +37,8 @@
       }
     };
   };
+
+  $: pushUp = block.item.state === 'pushup' ? gridSize * 40 : 0;
 </script>
 
 <div
@@ -44,8 +46,8 @@
   class="block-label-wrapper"
   style="
     position: absolute;
-    top: {block.labelTop}px;
-    height: {block.labelHeight}px;
+    top: {block.labelTop - pushUp}px;
+    height: {block.labelHeight + pushUp}px;
     width: {block.width}px;
     left: {gridSize + gridOverflow / 2}px;
     margin: 0px;

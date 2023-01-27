@@ -29,7 +29,6 @@
   export let labels: any[];
 
   export let zoomOut: boolean;
-  export let showRedBelowDivider: boolean;
 
   $: totalRows = $height / gridSize;
 
