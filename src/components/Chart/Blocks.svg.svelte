@@ -218,23 +218,22 @@
 </Svg>
 
 <Html>
-  {#if !zoomOut}
-    <div class="labels">
-      {#each blocks as block}
-        {@const state = block.item.state}
-        {@const offsetDocked = (state === 'docked' || state === 'showarrow' || state === 'colourchange') ? dividerLineOffset : 0}
-        {@const offsetDivider = (state === 'colourchange') ? Math.ceil(55 / gridSize) : 0}
+  <div class="labels">
+    {#each blocks as block}
+      {@const state = block.item.state}
+      {@const offsetDocked = (state === 'docked' || state === 'showarrow' || state === 'colourchange') ? dividerLineOffset : 0}
+      {@const offsetDivider = (state === 'colourchange') ? Math.ceil(55 / gridSize) : 0}
 
-        <Label
-          {block}
-          {gridSize}
-          {gridOverflow}
-          offsetBlocks={offsetDocked + offsetDivider}
-          {labels}
-        />
-      {/each}
-    </div>
-  {/if}
+      <Label
+        {block}
+        {gridSize}
+        {gridOverflow}
+        offsetBlocks={offsetDocked + offsetDivider}
+        {labels}
+        hide={zoomOut}
+      />
+    {/each}
+  </div>
 </Html>
 
 <style>

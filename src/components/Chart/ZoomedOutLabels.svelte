@@ -38,7 +38,7 @@
   class="bar"
   style="
     position: absolute;
-    top: {$height * 0.62}px;
+    top: {$height * 0.52}px;
     height: {$height * 0.28}px;
     width: {gridSize * 20}px;
   "
@@ -47,7 +47,7 @@
 <div
   class="label"
   style="
-    top: {$height * 0.75}px;
+    top: {$height * 0.63}px;
     width: 150px;
     right: 35px;
     text-align: right;

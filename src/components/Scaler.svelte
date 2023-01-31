@@ -46,15 +46,8 @@
         if (state === 'zoomout' && !zoomOut) {
           setTimeout(onZoomOut, 2000);
         }
-        // if (state === 'colourchange') {
-        //   showRedBelowDivider = isAboveBottomOfViewport;
-        //   // When we're transitioning colour, the arrow should always be visible
-        //   showArrow = true;
-        // }
         if (state === 'showarrow') {
           showArrow = isAboveBottomOfViewport;
-          // When we're looking at the arrow marker, the colour should always be blue
-          // showRedBelowDivider = false;
         }
       }
     });
@@ -64,18 +57,28 @@
 
   let zoomOutTriggerOffset: number;
   let colourChangeTriggerOffset: number;
+
+  const setTriggerPoints = () => {
+    const container: HTMLElement | null = document.querySelector('#scalerNAMEmain');
+
+    const zoomOutTrigger = labels.find(l => l.item.state === 'zoomout');
+    zoomOutTriggerOffset = container?.offsetTop + zoomOutTrigger?.offsetTop - zoomOutTrigger?.offsetHeight;
+
+    const colourChangeTrigger = labels.find(l => l.item.state === 'colourchange');
+    colourChangeTriggerOffset = container?.offsetTop + colourChangeTrigger?.offsetTop - colourChangeTrigger?.offsetHeight;
+  };
+
+  window.addEventListener("resize", setTriggerPoints);
+
   onMount(() => {
     labels.forEach((label) => observer.observe(label));
 
-    // Backup mechanism to trigger zoom out if the reader scrolls too far
-    setTimeout(() => {
-      zoomOutTriggerOffset = labels.find(l => l.item.state === 'zoomout')?.offsetTop;
-      colourChangeTriggerOffset = labels.find(l => l.item.state === 'colourchange')?.offsetTop;
-    }, 50);
+    // Mechanism to trigger more accurately than using mutation observer
+    setTimeout(setTriggerPoints, 300);
     addEventListener("scroll", () => {
-      const offset = window.scrollY - window.innerHeight * 2.5;
+      const offset = window.scrollY;
 
-      if (zoomOutTriggerOffset && zoomOutTriggerOffset < offset) {
+      if (zoomOutTriggerOffset && zoomOutTriggerOffset < (offset - window.innerHeight)) {
         onZoomOut();
       }
       if (colourChangeTriggerOffset && colourChangeTriggerOffset < offset) {
@@ -103,7 +106,6 @@
           left: 0,
           behavior: 'auto'
         })
-        zoomOutTriggerOffset = labels.find(l => l.item.state === 'zoomout')?.offsetTop;
       }, 300);
     }
   };
@@ -111,6 +113,8 @@
     zoomOut = false;
     showRedBelowDivider = false;
     showArrow = false;
+    setTimeout(setTriggerPoints, 400);
+    setTimeout(setTriggerPoints, 1000);
   };
 </script>
 

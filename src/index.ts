@@ -36,7 +36,7 @@ const mountComponents = (name: string, Component: typeof SvelteComponent, props?
     }
   );
 
-window.addEventListener("resize", function(event) {
+window.addEventListener("resize", () => {
   const width = Math.min(window.innerWidth - 20, 1000);
   components.forEach(el => el.$set({ width }));
 })

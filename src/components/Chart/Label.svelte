@@ -9,6 +9,7 @@
   export let gridOverflow: number;
   export let offsetBlocks: number;
   export let labels: any[];
+  export let hide: boolean;
 
   let labelRef: any;
 
@@ -52,6 +53,8 @@
     left: {gridSize + gridOverflow / 2}px;
     margin: 0px;
     z-index: 10000;
+
+    display: {hide ? 'none' : 'block'};
 
     --bar-offset: {$barOffset}px;
   "
