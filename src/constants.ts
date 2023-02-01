@@ -7,7 +7,7 @@ export const defaultCustomisation = {
 export const TOTAL_VALUE = 243_000; // in millions
 export const SQUARE_VALUE = 5; // in millions
 export const NUM_COLUMNS = 20;
-export const GRID_PADDING = 0.5;
+export const GRID_PADDING = 1;
 
 // Value to dock at
 export const DIVIDER_VALUE = 53_000; // in millions

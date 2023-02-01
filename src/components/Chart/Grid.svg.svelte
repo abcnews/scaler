@@ -31,5 +31,13 @@
   y={offsetBlocks * gridSize}
   height={heightBlocks * gridSize}
   width={widthBlocks * gridSize}
+  fill={colour}
+  opacity={0.3}
+/>
+<rect
+  x={0}
+  y={offsetBlocks * gridSize}
+  height={heightBlocks * gridSize}
+  width={widthBlocks * gridSize}
   fill={useGrid ? `url(#pattern-grid-${id})` : colour}
 />
