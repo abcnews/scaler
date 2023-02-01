@@ -58,7 +58,6 @@
     height: {$h}px;
     top: 30px;
     position: {zoomOut ? 'sticky' : 'static'};
-    transform: {zoomOut ? 'translateX(-50px)' : ''};
     transition: transform 800ms;
     margin: auto;
   ">

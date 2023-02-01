@@ -38,19 +38,19 @@
 
   $: middleGridLength = Math.ceil(MIDDLE_GRID_HEIGHT / gridSize);
   $: showRedBelowDivider ? colour.set(COLOURS.bgRed) : colour.set(COLOURS.bg);
+  $: dividerOffset = (Math.round(offsetValue / (NUM_COLUMNS * SQUARE_VALUE)) - 1) * gridSize;
 </script>
 
 <div
   style="
     position: relative;
-    top: {(Math.round(offsetValue / (NUM_COLUMNS * SQUARE_VALUE)) - 1) * gridSize}px;
+    top: {dividerOffset}px;
     left: 0;
     width: {NUM_COLUMNS * gridSize + 20}px;
-    height: {gridSize * length + 1}px;
+    height: {gridSize * length}px;
   "
 >
-
-<div class="sticky-top">
+  <div class="sticky-top">
     <svg style="width:100%;height:{lineOffset * gridSize}px;">
       <g style="transform: translateX({gridOverflow / 2}px);">
         <Grid
@@ -142,16 +142,15 @@
       </div>
     {/if}
   </div>
-
 </div>
 
 <div
   style="
     position: relative;
-    top: {(Math.round(offsetValue / (NUM_COLUMNS * SQUARE_VALUE)) - 1) * gridSize}px;
+    top: {dividerOffset}px;
     left: 0;
     width: {NUM_COLUMNS * gridSize + 20}px;
-    height: {gridSize * length + 1}px;
+    height: {gridSize * length}px;
     transform: translateY(-{gridSize * length}px);
   "
 >
@@ -164,12 +163,13 @@
       height: 100vh;
     "
   >
-    <svg style="width:100%;height:100%;">
+  <!-- height: {Math.ceil(window.innerHeight / gridSize) * gridSize}px; -->
+    <svg style="width:100%;height:100%;background:white;">
       <g style="transform: translateX({gridOverflow / 2}px);">
         <Grid
           id="bg-floating-below"
           offsetBlocks={lineOffset}
-          heightBlocks={length - lineOffset}
+          heightBlocks={length - lineOffset + 1}
           widthBlocks={NUM_COLUMNS}
           colour={$colour}
           useGrid={true}

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { getContext } from 'svelte';
-  import { fly } from 'svelte/transition';
+  import { fade } from 'svelte/transition';
   import { COLOURS } from '../../constants';
   export let gridSize: number;
 
@@ -9,7 +9,7 @@
 
 <div
   class="bar"
-  in:fly="{{ y: 200 }}"
+  in:fade="{{ delay: 1800 }}"
   style="
     position: absolute;
     top: 0px;
@@ -19,6 +19,7 @@
 />
 
 <div
+  in:fade="{{ delay: 1800 }}"
   class="label"
   style="
     top: -5px;
@@ -35,6 +36,7 @@
 
 
 <div
+  in:fade="{{ delay: 1800 }}"
   class="bar"
   style="
     position: absolute;
@@ -45,6 +47,7 @@
 />
 
 <div
+  in:fade="{{ delay: 1800 }}"
   class="label"
   style="
     top: {$height * 0.63}px;
@@ -60,11 +63,12 @@
 </div>
 
 <div
+  in:fade="{{ delay: 1800 }}"
   class="label"
   style="
-    top: calc({$height * 0.1}px);
-    width: 180px;
-    left: 35px;
+    top: calc({$height * 0.07}px);
+    width: 160px;
+    left: 20px;
     text-align: left;
 
     font-weight: 700;
@@ -77,24 +81,26 @@
 </div>
 
 <div
+  in:fade="{{ delay: 1800 }}"
   class="label"
   style="
-    top: calc({$height * 0.1}px + 30px);
-    width: 180px;
-    left: 35px;
+    top: calc({$height * 0.07}px + 30px);
+    width: 160px;
+    left: 20px;
     text-align: left;
   "
 >
-  Will go to people who earn <br />
-  <b>less</b> than $120,000 per year
+  Will go to people who earn
+  <b>less</b> than <br /> $120,000 per year
 </div>
 
 <div
+  in:fade="{{ delay: 1800 }}"
   class="label"
   style="
     top: calc({$height * 0.52}px);
-    width: 180px;
-    left: 35px;
+    width: 160px;
+    left: 20px;
     text-align: left;
 
     font-weight: 700;
@@ -107,21 +113,22 @@
 </div>
 
 <div
+  in:fade="{{ delay: 1800 }}"
   class="label"
   style="
     top: calc({$height * 0.52}px + 30px);
-    width: 180px;
-    left: 35px;
+    width: 160px;
+    left: 20px;
     text-align: left;
   "
 >
-  Will go to people who earn <br />
-  <b>more</b> than $120,000 per year
+  Will go to people who earn
+  <b>more</b> than <br /> $120,000 per year
 </div>
 
 <style lang="scss">
   .bar {
-    left: -15px;
+    left: -20px;
     z-index: 100;
     background: black;
   }

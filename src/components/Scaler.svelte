@@ -8,6 +8,7 @@
 
 <script lang="ts">
   import { onMount } from 'svelte';
+  import { Client } from '@abcnews/poll-counters-client';
 
   import Chart from './Chart/Chart.svelte';
   import Button from './Button.svelte';
@@ -15,6 +16,7 @@
   export let scrollyData: any;
   export let width: number;
 
+  const pollClient = new Client('SCROLL_WAYPOINT');
 	const isOdyssey: boolean = window.__IS_ODYSSEY_FORMAT__;
   let labels: any[] = [];
 	let scalerRef: HTMLElement | undefined;
@@ -70,8 +72,18 @@
 
   window.addEventListener("resize", setTriggerPoints);
 
+  const sentWaypoints: string[] = [];
+  const sendBeacon = (waypoint: string) => {
+    if (sentWaypoints.indexOf(waypoint) === -1) {
+      pollClient.increment({ question: waypoint, answer: waypoint });
+      sentWaypoints.push(waypoint);
+    }
+  };
+
   onMount(() => {
     labels.forEach((label) => observer.observe(label));
+
+    sendBeacon('start');
 
     // Mechanism to trigger more accurately than using mutation observer
     setTimeout(setTriggerPoints, 300);
@@ -79,9 +91,11 @@
       const offset = window.scrollY;
 
       if (zoomOutTriggerOffset && zoomOutTriggerOffset < (offset - window.innerHeight)) {
+        sendBeacon('zoomout');
         onZoomOut();
       }
       if (colourChangeTriggerOffset && colourChangeTriggerOffset < offset) {
+        sendBeacon('colourchange');
         showRedBelowDivider = true;
         // When we're transitioning colour, the arrow should already be visible
         showArrow = true;
