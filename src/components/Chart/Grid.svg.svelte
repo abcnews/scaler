@@ -32,7 +32,7 @@
   height={heightBlocks * gridSize}
   width={widthBlocks * gridSize}
   fill={colour}
-  opacity={0.4}
+  opacity={0.5}
 />
 <rect
   x={0}
