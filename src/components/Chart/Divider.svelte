@@ -192,6 +192,10 @@
     z-index: 6;
   }
 
+  :global(.layercake-layout-svg) {
+    z-index: 3;
+  }
+
   .label {
     position: absolute;
     text-align: center;
