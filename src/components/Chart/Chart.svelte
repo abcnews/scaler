@@ -47,6 +47,7 @@
 
   $: gridOverflow = w - gridSize * NUM_COLUMNS;
   $: dividerLineOffset = Math.floor((window.innerHeight / 5) / gridSize);
+  $: dividerRow = Math.round(DIVIDER_VALUE / (NUM_COLUMNS * SQUARE_VALUE));
 
   export let data: any[];
 </script>
@@ -86,6 +87,7 @@
             offsetValue={DIVIDER_VALUE}
             lineOffset={dividerLineOffset}
             length={DIVIDER_ROWS}
+            remainderLength={numRows - dividerRow}
             {showRedBelowDivider}
             {showArrow}
             {gridSize}

@@ -127,19 +127,20 @@
       colour={COLOURS.bg}
     />
 
-    <!-- Background grid after divider -->
-    <Grid
-      id="bg2"
-      heightBlocks={totalRows - dividerRow - DIVIDER_ROWS + 1}
-      widthBlocks={NUM_COLUMNS}
-      offsetBlocks={zoomOut ? dividerRow : dividerRow + DIVIDER_ROWS - 1}
-      {gridSize}
-      useGrid={!zoomOut}
-      colour={COLOURS.bgRed}
-    />
+    {#if zoomOut}
+      <!-- Background grid after divider -->
+      <Grid
+        id="bg2"
+        heightBlocks={totalRows - dividerRow - DIVIDER_ROWS + 1}
+        widthBlocks={NUM_COLUMNS}
+        offsetBlocks={zoomOut ? dividerRow : dividerRow + DIVIDER_ROWS - 1}
+        {gridSize}
+        useGrid={!zoomOut}
+        colour={COLOURS.bgRed}
+      />
+    {/if}
 
     {#if !zoomOut}
-      <!-- Blocks (don't refactor until we've decided on gutters + alignment) -->
       {#each blocks as block}
 
         <!-- BoM rebrand cost is so small we want to push it down and label it -->

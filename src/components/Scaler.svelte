@@ -64,7 +64,7 @@
     const container: HTMLElement | null = document.querySelector('#scalerNAMEmain');
 
     const zoomOutTrigger = labels.find(l => l.item.state === 'zoomout');
-    zoomOutTriggerOffset = container?.offsetTop + zoomOutTrigger?.offsetTop - zoomOutTrigger?.offsetHeight;
+    zoomOutTriggerOffset = container?.offsetTop + zoomOutTrigger?.offsetTop;
 
     const colourChangeTrigger = labels.find(l => l.item.state === 'colourchange');
     colourChangeTriggerOffset = container?.offsetTop + colourChangeTrigger?.offsetTop - colourChangeTrigger?.offsetHeight;
@@ -90,7 +90,7 @@
     addEventListener("scroll", () => {
       const offset = window.scrollY;
 
-      if (zoomOutTriggerOffset && zoomOutTriggerOffset < (offset - window.innerHeight)) {
+      if (zoomOutTriggerOffset && (zoomOutTriggerOffset + window.innerHeight * 2.5) < offset) {
         sendBeacon('zoomout');
         onZoomOut();
       }

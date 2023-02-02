@@ -31,6 +31,7 @@
   // How many rows from the top to dock the divider line
   export let lineOffset: number;
   export let length: number;
+  export let remainderLength: number;
 
   const LINE_WIDTH = 4;
 
@@ -39,6 +40,7 @@
   $: middleGridLength = Math.ceil(MIDDLE_GRID_HEIGHT / gridSize);
   $: showRedBelowDivider ? colour.set(COLOURS.bgRed) : colour.set(COLOURS.bg);
   $: dividerOffset = (Math.round(offsetValue / (NUM_COLUMNS * SQUARE_VALUE)) - 1) * gridSize;
+  $: windowRows = Math.ceil(window.innerHeight / gridSize);
 </script>
 
 <div
@@ -163,13 +165,12 @@
       height: 100vh;
     "
   >
-  <!-- height: {Math.ceil(window.innerHeight / gridSize) * gridSize}px; -->
-    <svg style="width:100%;height:100%;background:white;">
+    <svg style="width:100%;height:{gridSize * (remainderLength + windowRows)}px;background:white;">
       <g style="transform: translateX({gridOverflow / 2}px);">
         <Grid
           id="bg-floating-below"
           offsetBlocks={lineOffset}
-          heightBlocks={length - lineOffset + 1}
+          heightBlocks={remainderLength + windowRows}
           widthBlocks={NUM_COLUMNS}
           colour={$colour}
           useGrid={true}
