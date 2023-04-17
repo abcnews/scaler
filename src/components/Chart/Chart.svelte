@@ -85,7 +85,7 @@
         {#if !zoomOut}
           <Divider
             offsetValue={DIVIDER_VALUE}
-            lineOffset={dividerLineOffset}
+            dividerLineOffset={dividerLineOffset}
             length={DIVIDER_ROWS}
             remainderLength={numRows - dividerRow}
             {showRedBelowDivider}

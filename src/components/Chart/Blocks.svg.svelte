@@ -148,56 +148,60 @@
         {@const bomCustomOffsetX = isBom ? Math.floor(80 / gridSize) * gridSize * 0 : 0}
         {@const bomCustomOffsetY = isBom ? gridSize * 20 : 0}
 
-        {#if block.height > 0}
-          <rect
-            x={gridSize}
-            y={block.top}
-            height={block.height - gridSize}
-            width={block.width}
-            fill={getBlockColour(true, block.top)}
-            opacity={0.4}
-          />
-          <rect
-            x={gridSize}
-            y={block.top}
-            height={block.height - gridSize}
-            width={block.width}
-            fill={getBlockColour(zoomOut, block.top)}
-          />
-          {#if block.finalRowBlocks}
+        {@const dividerMismatch = gridSize * Math.ceil(window.innerHeight / gridSize) - window.innerHeight}
+        {@const afterDivider = block.top > (DIVIDER_ROWS * gridSize) ? dividerMismatch - gridSize : 0}
+
+        <g transform="translate(0, {afterDivider})">
+          {#if block.height > 0}
             <rect
               x={gridSize}
-              y={block.top + (block.height - gridSize)}
-              height={gridSize}
-              width={block.finalRowBlocks * gridSize}
+              y={block.top}
+              height={block.height - gridSize}
+              width={block.width}
               fill={getBlockColour(true, block.top)}
               opacity={0.4}
             />
             <rect
               x={gridSize}
-              y={block.top + (block.height - gridSize)}
-              height={gridSize}
-              width={block.finalRowBlocks * gridSize}
+              y={block.top}
+              height={block.height - gridSize}
+              width={block.width}
               fill={getBlockColour(zoomOut, block.top)}
             />
-          {/if}
-          {#if block.finalBlockPixels}
-            <rect
-              x={(block.finalRowBlocks + 1) * gridSize + bomCustomOffsetX}
-              y={block.top + (block.height - gridSize) + bomCustomOffsetY}
-              height={block.finalBlockPixels}
-              width={gridSize}
-              fill={getBlockColour(true, block.top)}
-              opacity={0.4}
-            />
-            <rect
-              x={(block.finalRowBlocks + 1) * gridSize + bomCustomOffsetX}
-              y={block.top + (block.height - gridSize) + bomCustomOffsetY}
-              height={block.finalBlockPixels}
-              width={gridSize}
-              fill={getBlockColour(zoomOut, block.top)}
-            />
-          {/if}
+            {#if block.finalRowBlocks}
+              <rect
+                x={gridSize}
+                y={block.top + (block.height - gridSize)}
+                height={gridSize}
+                width={block.finalRowBlocks * gridSize}
+                fill={getBlockColour(true, block.top)}
+                opacity={0.4}
+              />
+              <rect
+                x={gridSize}
+                y={block.top + (block.height - gridSize)}
+                height={gridSize}
+                width={block.finalRowBlocks * gridSize}
+                fill={getBlockColour(zoomOut, block.top)}
+              />
+            {/if}
+            {#if block.finalBlockPixels}
+              <rect
+                x={(block.finalRowBlocks + 1) * gridSize + bomCustomOffsetX}
+                y={block.top + (block.height - gridSize) + bomCustomOffsetY}
+                height={block.finalBlockPixels}
+                width={gridSize}
+                fill={getBlockColour(true, block.top)}
+                opacity={0.4}
+              />
+              <rect
+                x={(block.finalRowBlocks + 1) * gridSize + bomCustomOffsetX}
+                y={block.top + (block.height - gridSize) + bomCustomOffsetY}
+                height={block.finalBlockPixels}
+                width={gridSize}
+                fill={getBlockColour(zoomOut, block.top)}
+              />
+            {/if}
 
           {#if isBom}
             <g
@@ -238,6 +242,7 @@
             </g>
           {/if}
         {/if}
+          </g>
       {/each}
     {/if}
 

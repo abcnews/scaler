@@ -29,7 +29,7 @@
   export let showArrow: boolean;
 
   // How many rows from the top to dock the divider line
-  export let lineOffset: number;
+  export let dividerLineOffset: number;
   export let length: number;
   export let remainderLength: number;
 
@@ -53,12 +53,12 @@
   "
 >
   <div class="sticky-top">
-    <svg style="width:100%;height:{lineOffset * gridSize}px;">
+    <svg style="width:100%;height:{dividerLineOffset * gridSize}px;">
       <g style="transform: translateX({gridOverflow / 2}px);">
         <Grid
           id="bg-floating-above"
           offsetBlocks={0}
-          heightBlocks={lineOffset}
+          heightBlocks={dividerLineOffset}
           widthBlocks={NUM_COLUMNS}
           colour={COLOURS.bg}
           useGrid={true}
@@ -71,7 +71,7 @@
       <div
         in:fly="{{ y: 50, duration: 800 }}"
         class="arrow"
-        style="top: {lineOffset * gridSize - 70}px;"
+        style="top: {dividerLineOffset * gridSize - 70}px;"
       >
         <svg width="19" height="26" viewBox="0 0 19 26" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M10 3V26" stroke="white" stroke-width="3"/>
@@ -82,7 +82,7 @@
     
     <div
       class="label"
-      style="top: {lineOffset * gridSize - 40}px;"
+      style="top: {dividerLineOffset * gridSize - 40}px;"
     >
       $53 BILLION
     </div>
@@ -92,7 +92,7 @@
       style="
         position: absolute;
         left: 0px;
-        top: {lineOffset * gridSize - (LINE_WIDTH / 2)}px;
+        top: {dividerLineOffset * gridSize - (LINE_WIDTH / 2)}px;
         height: {LINE_WIDTH}px;
         width: 100%;
         background: white;
@@ -124,7 +124,7 @@
       <div
         class="label"
         style="
-          top: {lineOffset * gridSize + 8}px;
+          top: {dividerOffset * gridSize + 8}px;
           font-size: 28px;
         "
         in:fly="{{ y: -30, duration: 800 }}"
@@ -134,7 +134,7 @@
 
       <div
         class="arrow"
-        style="top: {lineOffset * gridSize + 48}px;"
+        style="top: {dividerLineOffset * gridSize + 48}px;"
         in:fly="{{ y: -30, duration: 800 }}"
       >
         <svg width="19" height="26" viewBox="0 0 19 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -169,7 +169,7 @@
       <g style="transform: translateX({gridOverflow / 2}px);">
         <Grid
           id="bg-floating-below"
-          offsetBlocks={lineOffset}
+          offsetBlocks={dividerLineOffset}
           heightBlocks={remainderLength + windowRows}
           widthBlocks={NUM_COLUMNS}
           colour={$colour}
