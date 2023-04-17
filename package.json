@@ -1,6 +1,6 @@
 {
 	"name": "scaler",
-	"version": "0.2.15",
+	"version": "0.2.16",
 	"description": "A project generated from aunty's svelte project template.",
 	"license": "MIT",
 	"private": true,
