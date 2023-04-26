@@ -41,7 +41,7 @@
   style="
     position: absolute;
     top: {$height * 0.52}px;
-    height: {$height * 0.28}px;
+    height: {$height * 0.29}px;
     width: {gridSize * 20}px;
   "
 />
@@ -56,10 +56,12 @@
     text-align: right;
   "
 >
-  <b>$69 billion</b> 
+  <b>$75 billion</b> 
   <br />
 
-  Free university
+  Increase to
+  <br />
+  JobSeeker
 </div>
 
 <div
