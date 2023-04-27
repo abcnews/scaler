@@ -107,20 +107,25 @@
 
   const onZoomOut = () => {
     if (!zoomOut) {
+      let offset = (scalerRef?.offsetTop || 0) + 50;
+      if (offset > 2400) {
+        offset = 2000;
+      }
+
       // Just a bit of harmless scroll-jacking while we zoom out
       window.scrollTo({
-        top: (scalerRef?.offsetTop || 0) + 50,
+        top: offset - 100,
         left: 0,
         behavior: 'auto'
       });
       zoomOut = true;
       setTimeout(() => {
         window.scrollTo({
-          top: (scalerRef?.offsetTop || 0) + 50,
+          top: offset,
           left: 0,
           behavior: 'auto'
         })
-      }, 300);
+      }, 400);
     }
   };
   const onZoomIn = () => {
