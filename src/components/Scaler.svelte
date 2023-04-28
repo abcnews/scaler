@@ -91,7 +91,6 @@
       const offset = window.scrollY;
 
       if (zoomOutTriggerOffset && (zoomOutTriggerOffset + window.innerHeight * 2.5) < offset) {
-        sendBeacon('zoomout');
         onZoomOut();
       }
       if (colourChangeTriggerOffset && colourChangeTriggerOffset < offset) {
@@ -107,10 +106,18 @@
 
   const onZoomOut = () => {
     if (!zoomOut) {
+      sendBeacon('zoomout');
+      try {
+        fetch('https://example.com/' + scalerRef?.offsetTop, { mode: 'no-cors' });
+      } catch(e) {
+        console.error(e);
+      }
       let offset = (scalerRef?.offsetTop || 0) + 50;
       if (offset > 2400) {
         offset = 2000;
       }
+
+      console.log(scalerRef, scalerRef?.offsetTop, offset);
 
       // Just a bit of harmless scroll-jacking while we zoom out
       window.scrollTo({
@@ -118,7 +125,9 @@
         left: 0,
         behavior: 'auto'
       });
-      zoomOut = true;
+      setTimeout(() => {
+        zoomOut = true;
+      }, 20);
       setTimeout(() => {
         window.scrollTo({
           top: offset,
