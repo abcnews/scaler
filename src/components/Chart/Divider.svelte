@@ -124,7 +124,7 @@
       <div
         class="label"
         style="
-          top: {dividerOffset * gridSize + 8}px;
+          top: {dividerLineOffset * gridSize + 8}px;
           font-size: 28px;
         "
         in:fly="{{ y: -30, duration: 800 }}"
